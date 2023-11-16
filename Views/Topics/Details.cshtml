@@ -1,0 +1,52 @@
+﻿@model Lab4_5.Models.Topic
+@{
+    ViewData["Title"] = "Details";
+}
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/Lab4_5.styles.css" asp-append-version="true" />
+</head>
+<p></p>
+<form class="details-form mx-auto text-center">
+    <div class="custom-box" disabled>
+        <p class="box-id">@Html.DisplayFor(model => model.Id)</p>
+        <p class="box-title">@Html.DisplayFor(model => model.Title)</p>
+        <p class="box-createdat">@Html.DisplayFor(model => model.CreatingTime)</p>
+        <p class="box-description">@Html.DisplayFor(model => model.Description)</p>
+        @* Add admin/author check *@
+        <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
+        <a asp-action="Delete" asp-route-id="@Model?.Id">Delete</a>
+    </div>
+
+    <button class="fixed-button" asp-controller="Reviews" asp-action="Create">
+        Додати коментар
+    </button>
+
+
+    @if (Model.Reviews.Count > 0)
+    {
+        <ul>
+            @foreach (var review in Model.Reviews)
+            {
+                <li>
+                    <p></p>
+                    <button class="review-form" disabled>
+                    @review.Text
+                    </button>
+                </li>
+            }
+        </ul>
+    }
+    else
+    {
+        <p></p>
+        <button class="no-review-form" disabled>
+                No reviews yet
+        </button>
+    }
+
+</form>

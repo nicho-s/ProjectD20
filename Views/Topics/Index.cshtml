@@ -1,0 +1,87 @@
+﻿@model IEnumerable<Lab4_5.Models.Topic>
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+}
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Форум</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/Lab4-5.styles.css" asp-append-version="true" />
+</head>
+<body>
+    <p></p>
+    <div class="row">
+        <div class="col-md-12">
+            <div id="topics-panel">
+                <ul class="nav nav-tabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <a class="nav-link active" id="new-topics-tab" data-bs-toggle="tab" href="#new-topics" role="tab"
+                           aria-controls="new-topics" aria-selected="true">Нові теми</a>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <a class="nav-link" id="popular-topics-tab" data-bs-toggle="tab" href="#popular-topics" role="tab"
+                           aria-controls="popular-topics" aria-selected="false">Популярні теми</a>
+                    </li>
+                </ul>
+                <div class="tab-content" id="myTabContent">
+                    <div class="tab-pane fade show active tab-pane-bg" id="new-topics" role="tabpanel" aria-labelledby="new-topics-tab">
+                        <div class="d-flex flex-column">
+
+                            @foreach (var topic in Model.OrderByDescending(t => t.CreatingTime).ToList())
+                            {
+                                <div class="row py-2 justify-content-center">
+                                    <form class="mx-auto text-center" asp-action="Details" asp-route-id="@topic.Id">
+                                        <button class="custom-box">
+                                            <p class="box-title">@topic.Title</p>
+                                            <p class="box-createdat">@topic.CreatingTime</p>
+                                            @if (topic.Description.Length > 300)
+                                            {
+                                                @Html.Raw(topic.Description.Substring(0, 300) + "...")
+                                            }
+                                            else
+                                            {
+                                                @Html.Raw(topic.Description)
+                                            }
+                                        </button>
+                                        <a asp-action="Edit" asp-route-id="@topic.Id">Edit</a> |
+                                        <a asp-action="Delete" asp-route-id="@topic.Id">Delete</a>
+                                    </form>
+                                </div>
+                            }
+                        </div>
+                    </div>
+
+                    <div class="tab-pane fade tab-pane-bg" id="popular-topics" role="tabpanel" aria-labelledby="popular-topics-tab">
+                        <!-- Вміст для "Популярних тем" -->
+                        <p>Тут буде вміст для популярних тем.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <form method="get" asp-action="Create">
+        <button class="fixed-button">
+            <p>Новий пост</p>
+        </button>
+    </form>
+    <script>
+        $(document).ready(function () {
+            $('#myTabs a').click(function (e) {
+                e.preventDefault();
+                $(this).tab('show');
+            });
+        });
+    </script>
+    @*     <script src="~/js/hideform.js"></script> *@
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.5.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js"></script>
+    <script src="https://unpkg.com/react@16.13.1/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@16.13.1/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/react-dnd@10.0.2/dist/ReactDnD.min.js"></script>
+    <script src="https://unpkg.com/react-dnd-html5-backend@10.0.2/dist/ReactDnDHTML5Backend.min.js"></script>
+</body>
+</html>
