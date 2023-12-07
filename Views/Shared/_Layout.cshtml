@@ -1,4 +1,15 @@
-﻿<!DOCTYPE html>
+﻿@using System.Drawing
+@using Microsoft.AspNetCore.Identity;
+@using GameForum.Models.DTO
+@using GameForum.Models
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+@using Microsoft.AspNetCore.Mvc.Localization
+
+@{
+}
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -6,10 +17,34 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/" asp-append-version="true" />
+    <!-- Підключення Bootstrap CSS та JS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .navbar-nav {
+            display: flex;
+            flex-direction: row-reverse;
+        }
+
+        .nav-item:last-child {
+            margin-left: auto;
+        }
+    </style>
+
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-md" style="background-color: rgba(0, 0, 0, 0.8);">
+        <nav class="navbar navbar-expand-md" style="background-color: rgba(0, 0, 0, 0.8); position: page fixed;">
             <div class="container">
                 <img id="dicelogo" src="~/pic/dicelogo.png" />
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
@@ -19,16 +54,44 @@
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav ml-auto">
                         <li class="nav-item">
-                            <a class="nav-link text-wheat" href="/Topics/Main">Головна</a>
+                            <a class="nav-link text-wheat" href="/Forum/Main">D20</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-wheat" href="/Topics/Index">Теми</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-wheat" href="#">Профіль</a>
+                            <a class="nav-link text-wheat" href="#">Повідомлення</a>
                         </li>
                     </ul>
                 </div>
+                @if (SignInManager.IsSignedIn(User))
+                {
+                    
+                    <ul class="navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a class="nav-link text-wheat" href="/Forum/Account/@UserManager.GetUserId(User)">Профіль</a>
+                        </li>
+                    </ul>
+                    <ul class="navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a class="nav-link text-wheat" href="/UserAuth/Logout">Вийти</a>
+                        </li>
+                    </ul>
+                }
+                else
+                {
+                    <ul class="navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a class="nav-link text-wheat" href="/UserAuth/Login">Увійти</a>
+                        </li>
+                    </ul>
+
+                    <ul class="navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a class="nav-link text-wheat" href="/UserAuth/Registr">Реєстрація</a>
+                        </li>
+                    </ul>
+                }
             </div>
         </nav>
     </header>
@@ -38,6 +101,7 @@
             @RenderBody()
         </main>
     </div>
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>

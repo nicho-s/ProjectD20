@@ -1,27 +1,35 @@
-﻿using Lab4_5.Models;
+﻿using GameForum.Models;
+using GameForum.ViewModels;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using System.Diagnostics;
 
 namespace Lab4_5.Controllers
 {
     public class ReviewsController : Controller
     {
         private readonly ForumDBContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public ReviewsController(ForumDBContext context)
+        public ReviewsController(UserManager<ApplicationUser> userManager, ForumDBContext context)
         {
+            _userManager = userManager;
             _context = context;
         }
 
-        [HttpGet]
+        // GET: Reviews
         public async Task<IActionResult> Index()
         {
-            var forumDBContext = _context.Reviews.Include(r => r.Topic);
-            return View(await forumDBContext.ToListAsync());
+              return _context.Reviews != null ? 
+                          View(await _context.Reviews.ToListAsync()) :
+                          Problem("Entity set 'ForumDBContext.Reviews'  is null.");
         }
 
-        [HttpGet]
+        // GET: Reviews/Details/5
+        [Authorize]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.Reviews == null)
@@ -30,7 +38,6 @@ namespace Lab4_5.Controllers
             }
 
             var review = await _context.Reviews
-                .Include(r => r.Topic)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (review == null)
             {
@@ -40,32 +47,68 @@ namespace Lab4_5.Controllers
             return View(review);
         }
 
-        [HttpGet]
-        public IActionResult Create(int id)
+        // GET: Reviews/Create
+        [Authorize]
+        public IActionResult Create()
         {
-            ViewBag.TopicId = id;
-            ViewData["TopicId"] = new SelectList(_context.Topics, "Id", "Id");
             return View();
         }
-        
+
+        // POST: Reviews/Create
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        //[ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Text,CreatingTime,TopicId")] Review review)
+        [Authorize]
+        [ValidateAntiForgeryToken]
+        [Route("[controller]/Create/{topicId:int}")]
+        public async Task<IActionResult> Create(int topicId, NewReviewViewModel model)
         {
             if (ModelState.IsValid)
             {
-                review.CreatingTime = DateTime.Now;
+                var user = await _userManager.GetUserAsync(User);
+                var review = new Review
+                {
+                    User = user,
+                    Text = model.Text,
+                    CreatingTime = DateTime.UtcNow,
+                    TopicId = topicId // Додаємо цей рядок
+                };
+
                 _context.Add(review);
                 await _context.SaveChangesAsync();
-                TempData["Message"] = "Тема успішно створена!";
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["TopicId"] = new SelectList(_context.Topics, "Id", "Id", review.TopicId);
-            TempData["Message"] = "Помилка";
-            return View(review);
+            else
+            {
+                // Вивести в консоль повідомлення про всі помилки валідації
+                foreach (var value in ModelState.Values)
+                {
+                    foreach (var error in value.Errors)
+                    {
+                        Console.WriteLine(error.ErrorMessage);
+                    }
+                }
+
+                // Вивести в Debug-консоль повідомлення про всі помилки валідації
+                Debug.WriteLine("ModelState is not valid. Errors:");
+
+                foreach (var key in ModelState.Keys)
+                {
+                    var state = ModelState[key];
+                    if (state.Errors.Any())
+                    {
+                        Debug.WriteLine($"Key: {key}, Errors: {string.Join(",", state.Errors.Select(x => x.ErrorMessage))}");
+                    }
+                }
+
+                // Повернути перегляд з помилками валідації
+                return View(model);
+            }
+            //return View(model);
         }
 
-        [HttpGet]
+        [Authorize]
+        // GET: Reviews/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.Reviews == null)
@@ -78,13 +121,16 @@ namespace Lab4_5.Controllers
             {
                 return NotFound();
             }
-            ViewData["TopicId"] = new SelectList(_context.Topics, "Id", "Id", review.TopicId);
             return View(review);
         }
 
+        // POST: Reviews/Edit/5
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Text,CreatingTime,TopicId")] Review review)
+        [Authorize]
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Text,CreatingTime")] Review review)
         {
             if (id != review.Id)
             {
@@ -111,11 +157,11 @@ namespace Lab4_5.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["TopicId"] = new SelectList(_context.Topics, "Id", "Id", review.TopicId);
             return View(review);
         }
 
-        [HttpGet]
+        // GET: Reviews/Delete/5
+        [Authorize]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Reviews == null)
@@ -124,7 +170,6 @@ namespace Lab4_5.Controllers
             }
 
             var review = await _context.Reviews
-                .Include(r => r.Topic)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (review == null)
             {
@@ -135,6 +180,7 @@ namespace Lab4_5.Controllers
         }
 
         // POST: Reviews/Delete/5
+        [Authorize]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
@@ -153,6 +199,7 @@ namespace Lab4_5.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        [Authorize]
         private bool ReviewExists(int id)
         {
           return (_context.Reviews?.Any(e => e.Id == id)).GetValueOrDefault();

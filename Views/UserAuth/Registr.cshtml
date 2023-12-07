@@ -1,0 +1,68 @@
+﻿@model GameForum.Models.DTO.RegistrModel
+@{
+    Layout = null;
+}
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/" asp-append-version="true" />
+</head>
+
+                
+<form class="login-form" asp-action="Registr" method="post">
+    <div class="form-group">
+        <input type="text" class="name-box" asp-for="Name" placeholder="Введіть ваше ім'я" />
+        <span class="text-danger" asp-validation-for="Name"></span>
+    </div>
+
+    <div class="form-group">
+        <input type="text" class="name-box" asp-for="Username" placeholder="Введіть псевдонім" />
+        <span class="text-danger" asp-validation-for="Username"></span>
+    </div>
+
+    <div class="form-group">
+        <input type="text" class="name-box" asp-for="Email" placeholder="Введіть пошту" />
+        <span class="text-danger" asp-validation-for="Email"></span>
+
+    </div>
+
+    <div class="form-group">
+        <input type="password" class="name-box" asp-for="Password" placeholder="Введіть пароль" />
+        <span class="text-danger" asp-validation-for="Password"></span>
+
+    </div>
+
+    <div class="form-group">
+        <input type="password" class="name-box" asp-for="PasswordConfirm" placeholder="Повторіть пароль" />
+        <span class="text-danger" asp-validation-for="PasswordConfirm"></span>
+
+    </div>
+
+    <div class="form-group">
+        <input type="date" class="form-control" asp-for="BirthDay" />
+        <span asp-validation-for="BirthDay" class="text-danger"></span>
+
+    </div>
+
+    <div class="form-group">
+        <label for="Sex">Стать:</label>
+        <select class="form-control" asp-for="Sex">
+            <option value="Male">Чоловіча</option>
+            <option value="Female">Жіноча</option>
+            <option value="Knight">Лицар</option>
+        </select>
+        <span asp-validation-for="Sex" class="text-danger"></span>
+    </div>
+
+    @if (TempData["msg"] != null)
+    {
+        <div class="form-group">
+            <span class="text-info">@TempData["msg"]</span>
+        </div>
+    }
+    <button type="submit" class="btn btn-info">Registration</button>
+    <a class="btn btn-primary" href="/UserAuth/Login">Login</a>
+</form>

@@ -93,6 +93,28 @@ body {
         margin: 0; /* Видалити внутрішній відступ у тексту */
     }
 
+.form-button {
+    bottom: 20px;
+    right: 20px;
+    background-color: rgba(0, 0, 0, 0.8); /* Чорний фон */
+    border: 2px solid white; /* Білі рамки */
+    padding: 0;
+    border-radius: 6px; /* Заокруглені кути */
+    opacity: 0.8; /* Прозорість 0.8 */
+    color: wheat; /* Білий текст */
+    padding: 10px 20px; /* Подбайте про відстань між текстом і краями кнопки */
+    cursor: pointer; /* Змінює вигляд курсора при наведенні */
+    transition: background-color 0.3s; /* Плавна анімація зміни кольору фону */
+}
+
+    .form-button:hover {
+        background-color: rgba(0, 0, 0, 0.4); /* Світліший фон при наведенні */
+    }
+
+    .form-button p {
+        margin: 0; /* Видалити внутрішній відступ у тексту */
+    }
+
 /* Стилі для модальної форми */
 /*.modal {
     display: none;
@@ -181,6 +203,16 @@ body {
     width: 98%;
 }
 
+.review-box {
+    background-color: transparent;
+    color: wheat;
+    border-radius: 10px;
+    padding: 20px;
+    border: none; /* Білі рамки */
+    text-align: left;
+    width: 98%;
+}
+
 .details-form {
     background-color: rgba(0, 0, 0, 0.4);
     color: wheat;
@@ -212,7 +244,7 @@ body {
 }
 
 .box-title {
-    font-size: 24px;
+    font-size: 18px;
 }
 
 .box-description {
@@ -231,4 +263,207 @@ body {
     justify-content: center;
     align-items: center;
     height: 100%;
+}
+
+/* Стилізація форми логіну */
+.login-form {
+    background-color: rgba(0, 0, 0, 0.4);
+    color: wheat;
+    border-radius: 10px;
+    padding: 20px;
+    border: none;
+    text-align: left;
+    width: 300px;
+    margin: auto;
+    margin-top: 100px;
+}
+
+    /* Стилізація елементів введення (input) */
+    .login-form input {
+        width: calc(100% - 20px);
+        padding: 10px;
+        margin: 5px 0;
+        box-sizing: border-box;
+        border-radius: 3px;
+    }
+
+    /* Стилізація кнопки */
+    .login-form button {
+        background-color: #4CAF50;
+        color: white;
+        padding: 10px 20px;
+        margin-top: 10px;
+        border: none;
+        border-radius: 3px;
+        cursor: pointer;
+    }
+
+        .login-form button:hover {
+            background-color: #45a049;
+        }
+
+    /* Стилізація посилання на реєстрацію та повідомлення */
+    .login-form a, .msg, .text-info {
+        color: dodgerblue;
+        text-decoration: none;
+        margin-top: 10px;
+        display: inline-block;
+    }
+
+        .login-form a:hover {
+            text-decoration: underline;
+        }
+
+/* Додайте ці стилі в ваш стиль або файл CSS */
+.ck.ck-reset_all,
+.ck.ck-reset_all * {
+    color: wheat !important;
+}
+
+    /* Налаштування для панелі інструментів (toolbar) */
+    .ck.ck-reset_all .ck-toolbar {
+        background-color: rgba(0, 0, 0, 0.8) !important; /* Колір темного фону панелі інструментів */
+        color: wheat !important; /* Колір тексту на темному фоні панелі інструментів */
+    }
+
+    /* Колір тексту та фону для кнопок на панелі інструментів */
+    .ck.ck-reset_all .ck-toolbar-button {
+        color: wheat !important;
+        background-color: rgba(0, 0, 0, 0.8) !important;
+        transition: background-color 0.2s ease-in-out; /* Зміна кольору плавно протягом 0.2 секунд при наведенні */
+    }
+
+        /* Колір тексту та фону для вибраних кнопок на панелі інструментів */
+        .ck.ck-reset_all .ck-toolbar-button.ck-on {
+            color: wheat !important; /* Колір тексту вибраної кнопки */
+            background-color: rgba(0, 0, 0, 0.8) !important; /* Колір фону вибраної кнопки */
+        }
+
+    /* Фон вводу тексту */
+    .ck.ck-reset_all .ck-content {
+        background-color: rgba(0, 0, 0, 0.8) !important; /* Колір темного фону для вводу тексту */
+        color: wheat !important; /* Колір тексту вводу тексту */
+        border-color: wheat !important; /* Колір обводки при натисканні на поле вводу тексту */
+    }
+
+        /* Зміна кольору обводки при фокусі на полі вводу тексту */
+        .ck.ck-reset_all .ck-content:focus {
+            border-color: wheat !important; /* Колір обводки при фокусі на полі вводу тексту */
+        }
+
+        /* Колір тексту та фону для параграфів у списку */
+        .ck.ck-reset_all .ck-content ul li,
+        .ck.ck-reset_all .ck-content ol li {
+            color: wheat !important; /* Колір тексту для параграфів у списку */
+            background-color: rgba(0, 0, 0, 0.6) !important; /* Колір фону для параграфів у списку */
+        }
+
+    /* Колір тексту для інструментів Heading, Bold, Italic, Link, Lists, Block quote, Undo, Redo */
+    .ck.ck-reset_all .ck-toolbar-button[data-action="heading"],
+    .ck.ck-reset_all .ck-toolbar-button[data-action="bold"],
+    .ck.ck-reset_all .ck-toolbar-button[data-action="italic"],
+    .ck.ck-reset_all .ck-toolbar-button[data-action="link"],
+    .ck.ck-reset_all .ck-toolbar-button[data-action="bulletedList"],
+    .ck.ck-reset_all .ck-toolbar-button[data-action="numberedList"],
+    .ck.ck-reset_all .ck-toolbar-button[data-action="blockQuote"],
+    .ck.ck-reset_all .ck-toolbar-button[data-action="undo"],
+    .ck.ck-reset_all .ck-toolbar-button[data-action="redo"] {
+        color: wheat !important; /* Колір тексту для вказаних інструментів */
+    }
+
+.ck.ck-editor__main > .ck-editor__editable {
+    border-color: wheat;
+    color: wheat !important; /* Колір тексту вводу тексту */
+    background-color: rgba(0, 0, 0, 0.8) !important; /* Колір темного фону для вводу тексту */
+    transition: background-color 0.2s ease-in-out; /* Зміна кольору плавно протягом 0.2 секунд при натисканні */
+}
+
+    .ck.ck-editor__main > .ck-editor__editable:focus {
+        background-color: rgba(0, 0, 0, 0.6) !important; /* Світліший фон при натисканні */
+    }
+
+/* Стилізація для .ck.ck-list__item .ck-button */
+.ck.ck-list__item .ck-button {
+    color: wheat !important; /* Колір тексту */
+    background-color: rgba(0, 0, 0, 0.8) !important; /* Колір фону */
+    border-color: wheat !important; /* Колір обводки */
+    transition: background-color 0.2s ease-in-out; /* Зміна кольору фону плавно протягом 0.2 секунд при наведенні */
+}
+
+    /* Зміна кольору фону при наведенні */
+    .ck.ck-list__item .ck-button:hover {
+        background-color: rgba(0, 0, 0, 0.6) !important;
+    }
+
+    /* Зміна кольору фону при натисканні */
+    .ck.ck-list__item .ck-button:active {
+        background-color: rgba(0, 0, 0, 0.4) !important;
+    }
+
+.name-box {
+    background-color: rgba(0, 0, 0, 0.8);
+    color: wheat;
+}
+
+.name-box {
+    width: 100%;
+    padding: 10px;
+    border-width: 2px; /* Зміни товщину рамки за потребою */
+    border-style: solid;
+    border-color: wheat;
+    border-radius: 2px;
+    background-color: rgba(0, 0, 0, 0.8);
+    color: wheat;
+    margin-bottom: 15px;
+}
+
+/* Згладжені кути для поля вводу */
+.name-box {
+    border-radius: 2px;
+}
+
+.separator {
+    margin: 0 10px; /* Встановіть відстань між іменем і датою, яка вам подобається */
+}
+
+.main-box {
+    background-color: rgba(0, 0, 0, 0.8);
+    color: wheat;
+    text-align: center;
+    border-radius: 10px;
+}
+
+.footer {
+    background-color: rgba(0, 0, 0, 0.8);
+    color: wheat;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    padding: 10px 0; /* Додайте відступи по бажанню */
+}
+
+/* cтилі для кнопки "+" */
+.create-button {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: black; /* Чорний фон */
+    border: 2px solid white; /* Білі рамки */
+    border-radius: 6px; /* Заокруглені кути */
+    color: wheat; /* Білий текст */
+    padding: 10px 20px; /* Подбайте про відстань між текстом і краями кнопки */
+    cursor: pointer; /* Змінює вигляд курсора при наведенні */
+    transition: background-color 0.3s; /* Плавна анімація зміни кольору фону */
+}
+
+    .create-button:hover {
+        background-color: rgba(64, 55, 30);
+    }
+
+    .create-button p {
+        margin: 0; /* Видалити внутрішній відступ у тексту */
+    }
+
+.ck.ck-editor__editable_inline > :last-child {
+    height: 300px; /* Задайте бажану висоту (наприклад, 300px) */
 }

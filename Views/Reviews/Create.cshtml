@@ -1,46 +1,60 @@
-﻿@model Lab4_5.Models.Review
+﻿@model GameForum.Models.Review
+
 @{
+    ViewData["Title"] = "Create";
 }
-<h1></h1>
-<h4>Review</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-@*             <input type="hidden" asp-for="TopicId" /> *@
-            <div class="form-group">
-                <label asp-for="Text" class="control-label"></label>
-                <input asp-for="Text" class="form-control" />
-                <span asp-validation-for="Text" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>           
-            <div class="form-group">
-                <label asp-for="TopicId" class="control-label"></label>
-                <select asp-for="TopicId" class="form-control" asp-items="ViewBag.TopicId"></select>
-            </div>
-            @if (TempData["Message"] != null)
-            {
-                <div class="alert alert-success">
-                    @TempData["Message"]
+
+<head>
+    <meta charset="UTF-8">
+    <title>Форум</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/LAB1.styles.css" asp-append-version="true" />
+</head>
+
+<p></p>
+
+<body>
+    <div class="row">
+        <div class="col-md-6 mx-auto">
+            <form class="custom-box" asp-action="Create">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                <!-- Використовуємо редактор тексту CKEditor -->
+                <div class="form-group">
+                    <textarea asp-for="Text" class="ckeditor form-control" placeholder="Введіть коментар"></textarea>
+                    <span asp-validation-for="Text" class="text-danger"></span>
                 </div>
-            }
-            @if (TempData["Error"] != null)
-            {
-                <div class="alert alert-danger">
-                    @TempData["Error"]
+
+                <!-- Кнопки для створення та повернення -->
+                <div class="form-group mt-3">
+                    <div class="d-flex justify-content-between">
+                        <button class="form-button" asp-controller="Forum" asp-action="Main" class="btn btn-secondary">Головна</button>
+                        <button class="form-button" type="submit" class="btn btn-primary">Створити</button>
+                    </div>
                 </div>
-            }
-        </form>
+            </form>
+        </div>
     </div>
-</div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
+    @section Scripts {
+        <script src="https://cdn.ckeditor.com/ckeditor5/33.0.0/classic/ckeditor.js"></script>
+        <script>
+            ClassicEditor
+                .create(document.querySelector('.ckeditor'), {
+                    toolbar: ['heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote', 'undo', 'redo'],
+                    heading: {
+                        options: [
+                            { model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph' },
+                            { model: 'heading1', view: 'h1', title: 'Heading 1', class: 'ck-heading_heading1' },
+                            { model: 'heading2', view: 'h2', title: 'Heading 2', class: 'ck-heading_heading2' }
+                        ]
+                    },
+                    remove: ['imageUpload', 'mediaEmbed']  // Вилучення кнопок додавання фото і медіа
+                })
+                .catch(error => {
+                    console.error(error);
+                });
+        </script>
+        }
+    </body>

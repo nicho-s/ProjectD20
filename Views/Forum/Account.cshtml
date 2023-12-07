@@ -1,0 +1,121 @@
+﻿@model Lab4_5.ViewModels.UserViewModel
+@using System.Web
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+@{
+}
+
+<head>
+    <meta charset="UTF-8">
+    <title>Форум</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/LAB1.styles.css" asp-append-version="true" />
+    <style>
+        .container1 {
+            display: flex;
+            justify-content: center; /* Center the content horizontally */
+            align-items: center; /* Center the content vertically */
+            min-height: 100vh; /* Set minimum height to the full viewport height */
+            color: wheat;
+        }
+
+        .card {
+            width: 50%; /* Adjust the card width as needed */
+            margin: 20px;
+            padding: 20px;
+            background-color: rgba(0,0,0, 0.8);
+        }
+
+        .user-image {
+            max-width: 50%;
+            height: auto;
+            border-radius: 50%; /* Make the image round */
+        }
+
+        .profile-info {
+            margin-top: 20px;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container1">
+        <div class="card">
+            <div class="text-center">
+                @switch (Model.Sex)
+                {
+                    case "Man":
+                        <img src="~/css/Man.jpg" class="user-image" />
+                        break;
+                    case "Woman":
+                        <img src="~/css/Woman.jpg" class="user-image" />
+                        break;
+                    case "Knight":
+                        <img src="~/css/Knight.jpg" class="user-image" />
+                        break;
+                    default:
+                        <img src="~/css/Knight.jpg" class="user-image" />
+                        break;
+                }
+            </div>
+
+            <div class="profile-info">
+                <h4 class="card-title text-center">Про користувача</h4>
+                <hr />
+
+                <dl class="row">
+                    <dt class="col-sm-3">Ім'я:</dt>
+                    <dd class="col-sm-9">@Html.DisplayFor(model => model.Name)</dd>
+
+                    <dt class="col-sm-3">Псевдонім:</dt>
+                    <dd class="col-sm-9">@Html.DisplayFor(model => model.UserName)</dd>
+
+                    <dt class="col-sm-3">Вік:</dt>
+                    <dd class="col-sm-9">@Html.DisplayFor(model => model.Age)</dd>
+
+                    <dt class="col-sm-3">Про себе:</dt>
+                    <dd class="col-sm-9">@Html.DisplayFor(model => model.Description)</dd>
+
+                    <dt class="col-sm-3">День народження:</dt>
+                    <dd class="col-sm-9">@Html.DisplayFor(model => model.FormattedBirthDay)</dd>
+
+                    <dt class="col-sm-3">Стать:</dt>
+                    <dd class="col-sm-9">
+                        @switch (Model.Sex)
+                        {
+                            case "Man":
+                                <p>Чоловік</p>
+                                break;
+                            case "Woman":
+                                <p>Жінка</p>
+                                break;
+                            case "Knight":
+                                <p>Лицар</p>
+                                break;
+                            default:
+                                <p>_______</p>
+                                break;
+                        }
+                    </dd>
+                    <div class="d-flex justify-content-between">
+                        @if (SignInManager.IsSignedIn(User))
+                        {
+                            // Перевірка, чи користувач - автор
+                            if (UserManager.GetUserId(User) == Model.Id)
+                            {
+                                <form clas="form-button" asp-controller="Forum" asp-action="Edit" method="get" asp-route-id="@Model.Id">
+                                    <button class="form-button" class="btn btn-secondary ml-2">
+                                        Редагувати
+                                    </button>
+                                </form>
+                            }
+                        }
+                    </div>
+                </dl>
+            </div>
+        </div>
+    </div>
+</body>

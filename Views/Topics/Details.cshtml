@@ -1,6 +1,10 @@
-﻿@model Lab4_5.Models.Topic
+﻿@using System.Web
+@using Microsoft.AspNetCore.Identity
+@model GameForum.Models.Topic
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
 @{
-    ViewData["Title"] = "Details";
 }
 
 <head>
@@ -9,44 +13,181 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Lab4_5.styles.css" asp-append-version="true" />
+    <style>
+        .box-details {
+            font-family: 'Arial', sans-serif;
+            font-size: 14px;
+            text-align: left;
+        }
+
+        .box-user {
+            font-weight: normal;
+        }
+
+        .user-image:{
+            border-radius: 50%;
+        }
+
+        .del {
+            width: 50px;
+            height: 50px;
+        }
+        
+        .user-comment {
+            display: flex;
+            align-items: start;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            color: wheat;
+            background-color: rgba(0,0,0,0.8);
+            padding: 10px;
+        }
+
+            .user-comment img {
+                
+                width: 50px;
+                height: 50px;
+                margin-right: 10px;
+            }
+
+        .user-info {
+            display: flex;
+            
+            align-items: center;
+            border-radius: 10px;
+            color: wheat;
+            background-color: rgba(0,0,0,0.8);
+            padding: 10px;
+            margin-right: 10px;
+        }
+
+        .comment-text {
+            border-radius: 10px;
+            color: wheat;
+            background-color: rgba(0,0,0,0.8);
+            padding: 10px;
+        }
+
+        .user-link {
+            text-decoration: none; /* відміняємо оформлення посилання */
+            color: inherit; /* успадковуємо колір від батьківського елемента (зазвичай чорний) */
+            cursor: pointer; /* змінюємо курсор при наведенні на текст */
+        }
+    </style>
 </head>
+
 <p></p>
-<form class="details-form mx-auto text-center">
+
+<form class="details-form mx-auto">
     <div class="custom-box" disabled>
-        <p class="box-id">@Html.DisplayFor(model => model.Id)</p>
-        <p class="box-title">@Html.DisplayFor(model => model.Title)</p>
-        <p class="box-createdat">@Html.DisplayFor(model => model.CreatingTime)</p>
-        <p class="box-description">@Html.DisplayFor(model => model.Description)</p>
-        @* Add admin/author check *@
-        <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-        <a asp-action="Delete" asp-route-id="@Model?.Id">Delete</a>
+        <p class="box-id" hidden>@Html.DisplayFor(model => model.Id)</p>
+
+        <div class="box-title">
+            <h4>@Html.DisplayFor(model => model.Title)</h4>
+        </div>
+
+        
+
+        <div class="box-details">
+            @if (!string.IsNullOrEmpty(Model?.User?.Name))
+            {
+                <span class="box-user">@Html.DisplayFor(model => model.User.UserName)</span>
+            }
+            else
+            {
+                <span class="box-user">Невідомий</span>
+            }
+            <span>, </span>
+            <span class="box-createdat">@Html.DisplayFor(model => model.CreatingTime)</span>
+        </div>
+
+
+
+        <div class="box-description">
+            <p>@Html.Raw(HttpUtility.HtmlDecode(Model.Description))</p>
+        </div>
+
+        <div class="box-actions">
+            @if (SignInManager.IsSignedIn(User))
+            {
+                // Перевірка, чи користувач - автор
+                if (UserManager.GetUserId(User) == Model?.User?.Id)
+                {
+                    <a asp-action="Edit" asp-route-id="@Model?.Id"><img src="~/css/whitered.png" class="own" /></a>
+                }
+
+                // Перевірка, чи користувач - автор або адміністратор
+                if (UserManager.GetUserId(User) == Model?.User?.Id || User.IsInRole("Admin"))
+                {
+                    <a asp-action="Delete" asp-route-id="@Model?.Id"><img src="~/css/whotedel.png" class="del" /></a>
+                }
+            }
+        </div>
+
+
     </div>
 
-    <button class="fixed-button" asp-controller="Reviews" asp-action="Create">
+    <div class="review-box" disabled>
+        @if (Model?.Reviews != null && Model.Reviews.Count() > 0)
+        {
+            <div class="review-container">
+                @foreach (var review in Model.Reviews)
+                {
+                    <div class="user-comment">
+                        <div class="user-info">
+                            @switch (@review.User.Sex)
+                            {
+                                case "Man":
+                                    <img src="~/css/Man.jpg" class="user-image" />
+                                    break;
+                                case "Woman":
+                                    <img src="~/css/Woman.jpg" class="user-image" />
+                                    break;
+                                case "Knight":
+                                    <img src="~/css/Knight.jpg" class="user-image" />
+                                    break;
+                                default:
+                                    <img src="~/css/Knight.jpg" class="user-image" />
+                                    break;
+                            }
+                            <a href="/Forum/Account/@review.User.Id" class="user-link"><strong>@review.User.UserName</strong></a>
+                        </div>
+                        <div>
+                                <p>@Html.Raw(HttpUtility.HtmlDecode(review.Text))</p>
+                        </div>
+                        @if (SignInManager.IsSignedIn(User))
+                        {
+                            // Перевірка, чи користувач - автор
+                            if (UserManager.GetUserId(User) == @review.User.Id)
+                            {
+                                <a asp-controller="Reviews" asp-action="Edit" asp-route-id="@review.Id">
+                                    <img src="~/css/whitered.png" class="own" />
+                                </a>
+                            }
+
+                            // Перевірка, чи користувач - автор або адміністратор
+                            if (UserManager.GetUserId(User) == @review.User.Id || User.IsInRole("Admin"))
+                            {
+                                <a asp-controller="Reviews" asp-action="Delete" asp-route-id="@review.Id">
+                                    <img src="~/css/whotedel.png" class="del" />
+                                </a>
+                            }
+                        }
+                    </div>
+                    
+                }
+            </div>
+        }
+        else
+        {
+            <p></p>
+            <div class="no-review-form">
+                No reviews yet
+            </div>
+        }
+    </div>
+
+    <button class="create-button" asp-controller="Reviews" asp-action="Create" asp-route-topicId="@Model?.Id">
         Додати коментар
     </button>
-
-
-    @if (Model.Reviews.Count > 0)
-    {
-        <ul>
-            @foreach (var review in Model.Reviews)
-            {
-                <li>
-                    <p></p>
-                    <button class="review-form" disabled>
-                    @review.Text
-                    </button>
-                </li>
-            }
-        </ul>
-    }
-    else
-    {
-        <p></p>
-        <button class="no-review-form" disabled>
-                No reviews yet
-        </button>
-    }
-
 </form>

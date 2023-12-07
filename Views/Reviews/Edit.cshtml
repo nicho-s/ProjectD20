@@ -1,4 +1,4 @@
-﻿@model Lab4_5.Models.Review
+﻿@model GameForum.Models.Review
 
 @{
     ViewData["Title"] = "Edit";
@@ -24,11 +24,6 @@
                 <span asp-validation-for="CreatingTime" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="TopicId" class="control-label"></label>
-                <select asp-for="TopicId" class="form-control" asp-items="ViewBag.TopicId"></select>
-                <span asp-validation-for="TopicId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
         </form>
@@ -36,7 +31,7 @@
 </div>
 
 <div>
-    <button asp-action="Index">Back to List</button>
+    <a asp-action="Index">Back to List</a>
 </div>
 
 @section Scripts {

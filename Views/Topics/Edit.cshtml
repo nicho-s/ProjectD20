@@ -1,50 +1,73 @@
-﻿@model Lab4_5.Models.Topic
-
+﻿@model GameForum.Models.Topic
 @{
-    ViewData["Title"] = "Edit";
 }
+
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8">
+    <title>Форум</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/LAB1.styles.css" asp-append-version="true" />
 </head>
-<h1>Edit</h1>
 
-<h4>Topic</h4>
-<hr />
+<p></p>
 <div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
+    <div class="col-md-6 mx-auto">
+        <form class="custom-box" asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
             <input type="hidden" asp-for="Id" />
+
             <div class="form-group">
-                <label asp-for="Title" class="control-label"></label>
-                <input asp-for="Title" class="form-control" />
+                <input class="name-box" asp-for="Title" class="form-control" placeholder="Назва теми" />
                 <span asp-validation-for="Title" class="text-danger"></span>
             </div>
+            <p></p>
             <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" />
+                <textarea asp-for="Description" class="ckeditor form-control" rows="4" placeholder="Опис теми"></textarea>
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="CreatingTime" class="control-label"></label>
-                <input asp-for="CreatingTime" class="form-control" />
-                <span asp-validation-for="CreatingTime" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+
+            <div class="form-group mt-3">
+                <div class="d-flex justify-content-between">
+                    <button class="form-button" asp-action="Index" class="btn btn-secondary">Головна</button>
+                    <button class="form-button btn btn-primary" type="button" onclick="confirmSave(event)">Зберегти</button>
+                </div>
             </div>
         </form>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="https://cdn.ckeditor.com/ckeditor5/33.0.0/classic/ckeditor.js"></script>
+    <script>
+        ClassicEditor
+            .create(document.querySelector('.ckeditor'), {
+                toolbar: ['heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote', 'undo', 'redo'],
+                heading: {
+                    options: [
+                        { model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph' },
+                        { model: 'heading1', view: 'h1', title: 'Heading 1', class: 'ck-heading_heading1' },
+                        { model: 'heading2', view: 'h2', title: 'Heading 2', class: 'ck-heading_heading2' }
+                    ]
+                },
+                remove: ['imageUpload', 'mediaEmbed']  // Вилучення кнопок додавання фото і медіа
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    </script>
+    <script>
+        function confirmSave(event) {
+            var isConfirmed = confirm("Ви впевнені, що хочете зберегти зміни?");
+            if (!isConfirmed) {
+                // Якщо користувач скасовує, відмовитися від відправки форми
+                event.preventDefault();
+            }
+            else{
+                document.querySelector('form').submit();
+            }
+        }
+    </script>
+
 }

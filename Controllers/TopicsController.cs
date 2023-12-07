@@ -1,25 +1,32 @@
-﻿using Lab4_5.Models;
+﻿using GameForum.Models;
+using GameForum.ViewModels;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Lab4_5.Controllers
 {
     public class TopicsController : Controller
     {
         private readonly ForumDBContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public TopicsController(ForumDBContext context)
+        public TopicsController(UserManager<ApplicationUser> userManager, ForumDBContext context)
         {
+            _userManager = userManager;
             _context = context;
         }
 
         // GET: Topics
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-              return _context.Topics != null ? 
-                          View(await _context.Topics.ToListAsync()) : 
-                          Problem("Entity set 'ForumDBContext.Topics'  is null.");
+            List<Topic> topics = _context.Topics.Include(t => t.User).Include(t => t.Reviews).ToList();
+            return View(topics);
+            //return _context.Topics != null ? 
+            //            View(await _context.Topics.ToListAsync()) :
+            //            Problem("Entity set 'ForumDBContext.Topics'  is null.");
         }
 
         // GET: Topics/Details/5
@@ -31,7 +38,9 @@ namespace Lab4_5.Controllers
             }
 
             var topic = await _context.Topics
+                .Include(t => t.User)
                 .Include(t => t.Reviews)
+                    .ThenInclude(r => r.User)
                 .FirstOrDefaultAsync(m => m.Id == id);
 
             if (topic == null)
@@ -42,6 +51,7 @@ namespace Lab4_5.Controllers
             return View(topic);
         }
 
+        [Authorize]
         // GET: Topics/Create
         public IActionResult Create()
         {
@@ -52,24 +62,29 @@ namespace Lab4_5.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
+        [Authorize]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Topic topic)
+        public async Task<IActionResult> Create(NewTopicViewModel model)
         {
             if (ModelState.IsValid)
             {
-                topic.CreatingTime = DateTime.Now;
+                var user = await _userManager.GetUserAsync(User);
+                var topic = new Topic
+                {
+                    User = user, Title = model.Title, Description = model.Description, CreatingTime = DateTime.UtcNow
+                };
+
                 _context.Add(topic);
                 await _context.SaveChangesAsync();
-                TempData["Message"] = "Тема успішно створена!";
                 return RedirectToAction(nameof(Index));
             }
-            TempData["Message"] = "Помилка";
-            return View(topic);
+            return View(model);
         }
 
+        // GET: Topics/Edit/5
+        [Authorize]
         public async Task<IActionResult> Edit(int? id)
         {
-            TempData["topicid"] = id;
             if (id == null || _context.Topics == null)
             {
                 return NotFound();
@@ -88,9 +103,10 @@ namespace Lab4_5.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,CreatingTime")] Topic topic)
+        [Authorize]
+        public async Task<IActionResult> Edit(int id, Topic model)
         {
-            if (id != topic.Id)
+            if (id != model.Id)
             {
                 return NotFound();
             }
@@ -99,12 +115,13 @@ namespace Lab4_5.Controllers
             {
                 try
                 {
-                    _context.Update(topic);
+                    model.CreatingTime = DateTime.UtcNow;
+                    _context.Update(model);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!TopicExists(topic.Id))
+                    if (!TopicExists(model.Id))
                     {
                         return NotFound();
                     }
@@ -115,10 +132,11 @@ namespace Lab4_5.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(topic);
+            return View(model);
         }
 
         // GET: Topics/Delete/5
+        [Authorize]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Topics == null)
@@ -139,6 +157,7 @@ namespace Lab4_5.Controllers
         // POST: Topics/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             if (_context.Topics == null)

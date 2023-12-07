@@ -1,4 +1,4 @@
-﻿namespace Lab4_5.Models
+﻿namespace GameForum.Models
 {
     public class Topic
     {
@@ -6,6 +6,12 @@
         public string? Title { get; set; }
         public string? Description { get; set; }
         public DateTime CreatingTime { get; set; }
-        public List<Review>? Reviews { get; set; }
+        public IEnumerable<Review> Reviews { get; set; }
+        public ApplicationUser? User { get; set; }
+
+        public Topic()
+        {
+            Reviews = new List<Review>();
+        }
     }
 }

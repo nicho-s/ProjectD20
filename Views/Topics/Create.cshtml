@@ -1,56 +1,59 @@
-﻿@model Lab4_5.Models.Topic
+﻿@model GameForum.ViewModels.NewTopicViewModel
 @{
 }
 
+<head>
+    <meta charset="UTF-8">
+    <title>Форум</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/LAB1.styles.css" asp-append-version="true" />
+</head>
+
 <p></p>
-<div class="row justify-content-center">
-    <div class="col-md-8">
+
+<div class="row">
+    <div class="col-md-6 mx-auto">
         <form class="custom-box" asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
             <div class="form-group">
-                <label asp-for="Title" class="control-label">Назва</label>
-                <input asp-for="Title" class="form-control" />
+                <input class="name-box" asp-for="Title" class="form-control" placeholder="Введіть назву теми"/>
                 <span asp-validation-for="Title" class="text-danger"></span>
             </div>
-
+            <p></p>
             <div class="form-group">
-                <label asp-for="Description" class="control-label">Опис</label>
-                <textarea asp-for="Description" class="form-control" rows="4"></textarea>
+                <textarea asp-for="Description" class="ckeditor form-control" rows="4" placeholder="Введіть опис теми"></textarea>
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
 
-            <div class="form-group">
-                <p></p>
+            <div class="form-group mt-3">
                 <div class="d-flex justify-content-between">
-                    <div>
-                        <a asp-action="Index" class="btn btn-secondary">До списку</a>
-                    </div>
-                    <div>
-                        <input type="submit" value="Створити" class="btn btn-success" />
-                    </div>
+                    <button class="form-button" asp-action="Index" class="btn btn-secondary">Головна</button>
+                    <button class="form-button" type="submit" class="btn btn-primary">Створити</button>
                 </div>
             </div>
-
-            @if (TempData["Message"] != null)
-            {
-                <div class="alert alert-success">
-                    @TempData["Message"]
-                </div>
-            }
-
-            @if (TempData["Error"] != null)
-            {
-                <div class="alert alert-danger">
-                    @TempData["Error"]
-                </div>
-            }
         </form>
     </div>
 </div>
 
 @section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
+    <script src="https://cdn.ckeditor.com/ckeditor5/33.0.0/classic/ckeditor.js"></script>
+    <script>
+        ClassicEditor
+            .create(document.querySelector('.ckeditor'), {
+                toolbar: ['heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote', 'undo', 'redo'],
+                heading: {
+                    options: [
+                        { model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph' },
+                        { model: 'heading1', view: 'h1', title: 'Heading 1', class: 'ck-heading_heading1' },
+                        { model: 'heading2', view: 'h2', title: 'Heading 2', class: 'ck-heading_heading2' }
+                    ]
+                },
+                remove: ['imageUpload', 'mediaEmbed']  // Вилучення кнопок додавання фото і медіа
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    </script>
 }

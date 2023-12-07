@@ -1,13 +1,10 @@
-﻿@model Lab4_5.Models.Review
+﻿@model GameForum.Models.Review
 
 @{
     ViewData["Title"] = "Details";
 }
 
-<p>
-    Details
-</p>
-
+<h1>Details</h1>
 
 <div>
     <h4>Review</h4>
@@ -24,12 +21,6 @@
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.CreatingTime)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Topic)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Topic.Id)
         </dd>
     </dl>
 </div>

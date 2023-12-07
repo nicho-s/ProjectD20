@@ -1,4 +1,4 @@
-﻿namespace Lab4_5.Models
+﻿namespace GameForum.Models
 {
     public class Review
     {
@@ -7,5 +7,6 @@
         public DateTime CreatingTime { get; set; }
         public int TopicId { get; set; }
         public Topic? Topic { get; set; }
+        public ApplicationUser? User { get; set; }
     }
 }
