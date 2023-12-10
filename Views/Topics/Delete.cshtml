@@ -4,36 +4,41 @@
     ViewData["Title"] = "Delete";
 }
 
-<h1>Delete</h1>
+<style>
+    .styled-form {
+        background-color: rgba(0, 0, 0, 0.8);
+        border: 2px solid wheat;
+        border-radius: 10px;
+        padding: 20px;
+        width: 300px; /* Задайте ширину форми за потреби */
+        margin: 0 auto; /* Вирівнюйте по центру */
+    }
 
-<h3>Ви дійсно бажаєте це видалити?</h3>
-<div>
-    <h4>Topic</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Title)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Title)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CreatingTime)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CreatingTime)
-        </dd>
-    </dl>
-    
-    <form asp-action="Delete">
-        <input type="hidden" asp-for="Id" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index">Back to List</a>
-    </form>
-</div>
+        .styled-form label, .styled-form p {
+            color: wheat;
+        }
+
+    .btn-danger {
+        background-color: rgba(255, 0, 0, 0.8);
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+        .btn-danger:hover {
+            background-color: red;
+        }
+</style>
+
+<p></p>
+
+<form asp-action="Delete" class="styled-form">
+    <input type="hidden" asp-for="Id" />
+    <div class="form-group">
+        <label>Підтвердження:</label>
+        <p>Ви впевнені, що варто бажаєте видалити тему?</p>
+    </div>
+    <input type="submit" value="Видалити" class="btn btn-danger">
+</form>

@@ -1,8 +1,10 @@
 ﻿@using System.Web
 @model IEnumerable<GameForum.Models.Topic>
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+@using Microsoft.AspNetCore.Identity
 
 @{
-    ViewData["Title"] = "Index";
 }
 
 <head>
@@ -15,51 +17,105 @@
 
 @foreach (var topic in Model.OrderByDescending(t => t.CreatingTime).ToList())
 {
-    <div class="row py-2 justify-content-center">
-        <form class="mx-auto text-center" method="get" asp-controller="Topics" asp-action="Details" asp-route-id="@topic.Id">
-            <button class="custom-box">
-                <div class="box-title">
-                    <h4>@topic.Title</h4>
-                </div>
+    if(topic.IsHidden == true && !User.IsInRole("Admin"))
+    {
+        <div class="row py-2 justify-content-center">
+            <form class="mx-auto text-center">
+                <button class="custom-box">
+                    <div class="box-title">
+                        <h4>Прихована тема</h4>
+                    </div>
 
-                <style>
-                    .box-details {
-                        font-family: 'Arial', sans-serif;
-                        font-size: 14px;
-                        text-align: left;
-                    }
+                    <style>
+                        .box-details {
+                            font-family: 'Arial', sans-serif;
+                            font-size: 14px;
+                            text-align: left;
+                        }
 
-                    .box-user {
-                        font-weight: normal;
-                    }
-                </style>
+                        .box-user {
+                            font-weight: normal;
+                        }
+                    </style>
 
-                <div class="box-details">
-                    @if (!string.IsNullOrEmpty(@topic.User?.Name))
-                    {
-                        <span class="box-user">@topic.User.UserName</span>
-                    }
-                    else
-                    {
-                        <span class="box-user">Невідомий</span>
-                    }
-                    <span>, </span>
-                    <span class="box-createdat">@topic.CreatingTime</span>
-                </div>
+                    <div class="box-details">
+                            <span class="box-user">Приховано</span>
+                        <span>, </span>
+                        <span class="box-createdat">Приховано</span>
+                    </div>
 
-                <p class="box-description">
-                    @Html.Raw(HttpUtility.HtmlDecode(@TruncateDescription(topic.Description, 100)))
-                </p>
-            </button>
-        </form>
-    </div>
+                    <p class="box-description">
+                        Цю тему було приховано через проблеми із правилами спільноти,
+                        імовірно скоро вона буде видалена
+                    </p>
+                </button>
+            </form>
+        </div>
+    }
+    else
+    {
+        <div class="row py-2 justify-content-center">
+            <form class="mx-auto text-center" method="get" asp-controller="Topics" asp-action="Details" asp-route-id="@topic.Id">
+                <button class="custom-box">
+                    <div class="box-title">
+                        <h4>@topic.Title</h4>
+                    </div>
+
+                    <style>
+                        .box-details {
+                            font-family: 'Arial', sans-serif;
+                            font-size: 14px;
+                            text-align: left;
+                        }
+
+                        .box-user {
+                            font-weight: normal;
+                        }
+                    </style>
+
+                    <div class="box-details">
+                        @if (!string.IsNullOrEmpty(@topic.User?.Name))
+                        {
+                            <span class="box-user">@topic.User.UserName</span>
+                        }
+                        else
+                        {
+                            <span class="box-user">Невідомий</span>
+                        }
+                        <span>, </span>
+                        <span class="box-createdat">@topic.CreatingTime</span>
+                    </div>
+
+                    <p class="box-description">
+                        @Html.Raw(HttpUtility.HtmlDecode(@TruncateDescription(topic.Description, 100)))
+                    </p>
+                </button>
+            </form>
+        </div>
+    }
 }
 
-<form method="get" asp-controller="Topics" asp-action="Create">
-    <button class="create-button">
-        <p>Новий пост</p>
-    </button>
-</form>
+@if (SignInManager.IsSignedIn(User))
+{
+    var user = await UserManager.GetUserAsync(User);
+
+    if (user.IsMuted == false)
+    {
+        <form method="get" asp-controller="Topics" asp-action="Create">
+            <button class="create-button">
+                <p>Новий пост</p>
+            </button>
+        </form>
+    }
+    else
+    {
+        <form href="#">
+            <button class="create-button">
+                <p>Новий пост</p>
+            </button>
+        </form>
+    }
+}
 
 @functions {
     public static string TruncateDescription(string input, int maxLength)

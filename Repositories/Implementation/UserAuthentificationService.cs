@@ -1,7 +1,7 @@
 ﻿using GameForum.Models;
 using GameForum.Models.DTO;
 using GameForum.Repositories.Abstract;
-using Lab4_5.ViewModels;
+using GameForum.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
 
@@ -30,7 +30,12 @@ namespace GameForum.Repositories.Implementation
                 status.StatusMessage = "Invalid username";
                 return status;
             }
-
+            if (user.IsBanned)
+            {
+                status.StatusCode = 0;
+                status.StatusMessage = "User has been blocked";
+                return status;
+            }
             if (!await userManager.CheckPasswordAsync(user, model.Password))
             {
                 status.StatusCode = 0;
@@ -93,6 +98,8 @@ namespace GameForum.Repositories.Implementation
                 Sex = model.Sex,
                 BirthDay = model.BirthDay,
                 EmailConfirmed = true,
+                IsBanned = false,
+                IsMuted = false,
 
             };
             var result = await userManager.CreateAsync(user, model.Password);

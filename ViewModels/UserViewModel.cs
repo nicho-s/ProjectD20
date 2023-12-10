@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Lab4_5.ViewModels
+namespace GameForum.ViewModels
 {
     public class UserViewModel
     {
@@ -17,5 +17,7 @@ namespace Lab4_5.ViewModels
         [Display(Name = "Formatted BirthDay")]
         public string FormattedBirthDay => BirthDay.ToShortDateString();
         public string Sex { get; set; }
+        public bool IsBanned { get; set;}
+        public bool IsMuted { get; set;}
     }
 }

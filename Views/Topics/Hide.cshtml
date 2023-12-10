@@ -1,5 +1,7 @@
-﻿@model GameForum.Models.Review
+﻿@model GameForum.ViewModels.HideTopicViewModel
+
 @{
+    ViewData["Title"] = "Hide";
 }
 
 <style>
@@ -32,11 +34,11 @@
 
 <p></p>
 
-<form asp-action="Delete" class="styled-form">
-    <input type="hidden" asp-for="Id" />
+<form asp-action="Hide" asp-route-id="@Model.Id" method="post" class="styled-form">
     <div class="form-group">
         <label>Підтвердження:</label>
-        <p>Ви впевнені, що варто бажаєте видалити повідомлення?</p>
+        <p>Ви впевнені, що варто приховати тему?</p>
     </div>
-    <input type="submit" value="Видалити" class="btn btn-danger">
+
+    <button type="submit" class="btn btn-danger">Приховати</button>
 </form>

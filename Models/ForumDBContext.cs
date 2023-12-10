@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Lab4_5.ViewModels;
+using GameForum.ViewModels;
 
 namespace GameForum.Models
 {
@@ -78,7 +78,9 @@ namespace GameForum.Models
                 Name = "TrueAdmin",
                 Sex = "Knight",
                 EmailConfirmed = true,
-                PhoneNumberConfirmed = true
+                PhoneNumberConfirmed = true,
+                IsBanned = false,
+                IsMuted = false,
             };
 
             var userInDb = await userManager.FindByEmailAsync(user.Email);
@@ -89,8 +91,12 @@ namespace GameForum.Models
             }
         }
 
-        public DbSet<Lab4_5.ViewModels.UserViewModel> UserViewModel { get; set; } = default!;
+        public DbSet<GameForum.ViewModels.UserViewModel> UserViewModel { get; set; } = default!;
 
-        public DbSet<Lab4_5.ViewModels.UpdUserViewModel> UpdUserViewModel { get; set; } = default!;
+        public DbSet<GameForum.ViewModels.UpdUserViewModel> UpdUserViewModel { get; set; } = default!;
+
+        public DbSet<GameForum.ViewModels.HideTopicViewModel> HideTopicViewModel { get; set; } = default!;
+
+        public DbSet<GameForum.ViewModels.HideReviewViewModel> HideReviewViewModel { get; set; } = default!;
     }
 }

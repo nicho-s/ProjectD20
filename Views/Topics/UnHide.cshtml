@@ -1,5 +1,7 @@
-﻿@model GameForum.Models.Review
+﻿@model GameForum.ViewModels.HideTopicViewModel
+
 @{
+    ViewData["Title"] = "UnHide";
 }
 
 <style>
@@ -17,7 +19,7 @@
         }
 
     .btn-danger {
-        background-color: rgba(255, 0, 0, 0.8);
+        background-color: rgba(0, 0, 255, 0.8);
         color: white;
         border: none;
         padding: 10px 20px;
@@ -26,17 +28,17 @@
     }
 
         .btn-danger:hover {
-            background-color: red;
+            background-color: blue;
         }
 </style>
 
 <p></p>
 
-<form asp-action="Delete" class="styled-form">
-    <input type="hidden" asp-for="Id" />
+<form asp-action="UnHide" asp-route-id="@Model.Id" method="post" class="styled-form">
     <div class="form-group">
         <label>Підтвердження:</label>
-        <p>Ви впевнені, що варто бажаєте видалити повідомлення?</p>
+        <p>Ви впевнені, що варто показати тему?</p>
     </div>
-    <input type="submit" value="Видалити" class="btn btn-danger">
+
+    <button type="submit" class="btn btn-danger">Показати</button>
 </form>

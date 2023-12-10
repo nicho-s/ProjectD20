@@ -5,12 +5,10 @@
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
 @using Microsoft.AspNetCore.Mvc.Localization
-
 @{
 }
 
 <!DOCTYPE html>
-<html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -59,11 +57,15 @@
                         <li class="nav-item">
                             <a class="nav-link text-wheat" href="/Topics/Index">Теми</a>
                         </li>
-                        <li class="nav-item">
+@*                         <li class="nav-item">
                             <a class="nav-link text-wheat" href="#">Повідомлення</a>
-                        </li>
+                        </li> *@
+@*                         <li>
+                            @await Html.PartialAsync("_LanguagePartial")
+                        </li> *@
                     </ul>
                 </div>
+
                 @if (SignInManager.IsSignedIn(User))
                 {
                     
@@ -107,4 +109,3 @@
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
-</html>

@@ -2,7 +2,6 @@
 using GameForum.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
@@ -76,7 +75,8 @@ namespace Lab4_5.Controllers
 
                 _context.Add(review);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+
+                return RedirectToAction("Details", "Topics", new { id = topicId });
             }
             else
             {
@@ -100,11 +100,9 @@ namespace Lab4_5.Controllers
                         Debug.WriteLine($"Key: {key}, Errors: {string.Join(",", state.Errors.Select(x => x.ErrorMessage))}");
                     }
                 }
-
                 // Повернути перегляд з помилками валідації
                 return View(model);
             }
-            //return View(model);
         }
 
         [Authorize]
@@ -203,6 +201,38 @@ namespace Lab4_5.Controllers
         private bool ReviewExists(int id)
         {
           return (_context.Reviews?.Any(e => e.Id == id)).GetValueOrDefault();
+        }
+
+        public async Task<IActionResult> HideRev(HideReviewViewModel model)
+        {
+            if (!ModelState.IsValid) return View(model);
+
+            var review = await _context.Reviews.FirstOrDefaultAsync(u => u.Id == model.Id);
+            if (review == null) return NotFound();
+
+            if (!review.IsHidden) review.IsHidden = true;
+
+            _context.Reviews.Update(review);
+
+            await _context.SaveChangesAsync();
+
+            return View(model);
+        }
+
+        public async Task<IActionResult> UnHideRev(HideReviewViewModel model)
+        {
+            if (!ModelState.IsValid) return View(model);
+
+            var review = await _context.Reviews.FirstOrDefaultAsync(u => u.Id == model.Id);
+            if (review == null) return NotFound();
+
+            if (review.IsHidden) review.IsHidden = false;
+
+            _context.Reviews.Update(review);
+
+            await _context.SaveChangesAsync();
+
+            return View(model);
         }
     }
 }

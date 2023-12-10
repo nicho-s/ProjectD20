@@ -1,6 +1,6 @@
 ﻿using GameForum.Models;
 using GameForum.Repositories.Abstract;
-using Lab4_5.ViewModels;
+using GameForum.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
@@ -48,6 +48,8 @@ namespace Lab4_5.Controllers
                 BirthDay = user.BirthDay,
                 Sex = user.Sex,
                 UserName = user.UserName,
+                IsBanned = user.IsBanned,
+                IsMuted = user.IsMuted,
             };
 
             // Розрахунок віку
@@ -137,7 +139,7 @@ namespace Lab4_5.Controllers
         }
 
         [HttpPost]
-        public IActionResult SetLang(string culture, string returnUrl)
+        public IActionResult SetLanguage(string culture, string returnUrl)
         {
             Response.Cookies.Append(
                 CookieRequestCultureProvider.DefaultCookieName,
@@ -146,6 +148,78 @@ namespace Lab4_5.Controllers
             );
 
             return LocalRedirect(returnUrl);
+        }
+
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> Ban(BanUserViewModel model)
+        {
+            if (!ModelState.IsValid) return View(model);
+
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == model.id);
+            if (user == null) return NotFound();
+
+            if (!user.IsBanned) user.IsBanned = true;
+            
+            _context.Users.Update(user);
+
+            await _context.SaveChangesAsync();
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> UnBan(BanUserViewModel model)
+        {
+            if (!ModelState.IsValid) return View(model); 
+
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == model.id);
+            if (user == null) return NotFound(); 
+
+            if (user.IsBanned)  user.IsBanned = false;  
+
+            _context.Users.Update(user);
+
+            await _context.SaveChangesAsync();
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> Mute(MuteUserViewModel model)
+        {
+            if (!ModelState.IsValid) return View(model);
+
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == model.id);
+            if (user == null) return NotFound();
+
+            if (!user.IsMuted) user.IsMuted = true;
+
+            _context.Users.Update(user);
+
+            await _context.SaveChangesAsync();
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> UnMute(MuteUserViewModel model)
+        {
+            if (!ModelState.IsValid) return View(model);
+
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == model.id);
+            if (user == null) return NotFound();
+
+            if (user.IsMuted) user.IsMuted = false;
+
+            _context.Users.Update(user);
+
+            await _context.SaveChangesAsync();
+
+            return View(model);
         }
     }
 }

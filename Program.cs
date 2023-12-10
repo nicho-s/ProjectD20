@@ -1,26 +1,47 @@
 using GameForum.Models;
 using GameForum.Repositories.Abstract;
 using GameForum.Repositories.Implementation;
+using Lab4_5;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Localization;
+using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.EntityFrameworkCore;
+using System.Globalization;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
 
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews()
+    .AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix)
+    .AddDataAnnotationsLocalization(options => {
+        options.DataAnnotationLocalizerProvider = (type, factory) =>
+            factory.Create(typeof(SharedResource));
+    });
 
 builder.Services.AddDbContext<ForumDBContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
     .AddEntityFrameworkStores<ForumDBContext>()
     .AddDefaultTokenProviders();
-
 builder.Services.ConfigureApplicationCookie(options => options.LoginPath = "/UserAuth/Login");
-
 builder.Services.AddScoped<IUserAuthentificationService, UserAuthenticationService>();
 
+builder.Services.Configure<RequestLocalizationOptions>(options => 
+{ 
+    var supportedCultures = new[] 
+    { 
+        new CultureInfo("en"), 
+        new CultureInfo("uk"), 
+    }; 
+        options.DefaultRequestCulture = new RequestCulture("uk"); 
+        options.SupportedCultures = supportedCultures; 
+        options.SupportedUICultures = supportedCultures; 
+    });
+
 var app = builder.Build();
+
+app.UseRequestLocalization();
 
 if (!app.Environment.IsDevelopment())
 {

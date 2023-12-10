@@ -23,13 +23,14 @@ namespace GameForum.Models.DTO
         public string? PasswordConfirm { get; set; }
 
         [Required(ErrorMessage = "Будь ласка виберіть дату народження")]
-        [DataType(DataType.Date)]
+        [Range(typeof(DateTime), "01/01/1900", "01/01/2010", ErrorMessage = "Дата народження повинна бути в межах від 01.01.1900 до 01.01.2010")]
         public DateTime BirthDay { get; set; }
 
 
         [Required(ErrorMessage = "Виберіть стать")]
-        public string Sex { get; set; }
-
+        public string? Sex { get; set; }
         public string? Role { get; set; }
+        public bool IsBanned { get; set; }
+        public bool IsMuted { get; set; }
     }
 }

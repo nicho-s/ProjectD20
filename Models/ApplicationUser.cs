@@ -11,5 +11,7 @@ namespace GameForum.Models
         public string? Sex { get; set; }
         public List<Topic>? Topics { get; set; } = new List<Topic>();
         public List<Review>? Reviews { get; set; } = new List<Review>();
+        public bool IsBanned { get; set; }
+        public bool IsMuted { get; set; }
     }
 }

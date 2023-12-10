@@ -5,8 +5,9 @@ namespace GameForum.Models.DTO
     public class LoginModel
     {
         [Required]
-        public string? Username { get; set; }
+        public required string Username { get; set; }
         [Required]
-        public string? Password { get; set; }
+        public required string Password { get; set; }
+        public bool IsBanned {  get; set; }
     }
 }

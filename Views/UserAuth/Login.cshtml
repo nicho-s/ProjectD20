@@ -2,39 +2,43 @@
 @{
     Layout = null;
 }
+
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/" asp-append-version="true" />
 </head>
 
 <body>
-    <form class="login-form" asp-action="Login" method="post">
+    <form class="login-form" style="align-content:center" asp-action="Login" method="post">
 
         <div class="container">
-            <label asp-for="Username"><b>Username</b></label>
-            <input class="name-box" type="text" asp-for="Username" placeholder="Enter Username">
-            <div class="msg">
-                <span class="err" asp-validation-for="Username"></span>
-            </div>
-
-            <label asp-for="Password"><b>Password</b></label>
-            <input class="name-box"  type="password" asp-for="Password" placeholder="Enter Password">
-            <div class="msg">
-                <span asp-validation-for="Password" class="err"></span>
-            </div>
-
-            @if (TempData["msg"] != null)
-            {
+            <div class="text-center">
+                <label asp-for="Username"><a>Username</a></label>
+                <input class="name-box" type="text" asp-for="Username" placeholder="Enter Username">
                 <div class="msg">
-                    @TempData["msg"]
+                    <span class="err" asp-validation-for="Username"></span>
                 </div>
-            }
 
-            <button type="submit">Login</button>
-            <a class="text-alert" href="/UserAuth/Registr">Not a user? SignUp</a>
+                <label asp-for="Password"><a>Password</a></label>
+                <input class="name-box" type="password" asp-for="Password" placeholder="Enter Password">
+                <div class="msg">
+                    <span asp-validation-for="Password" class="err"></span>
+                </div>
+
+                @if (TempData["msg"] != null)
+                {
+                    <div class="msg">
+                        @TempData["msg"]
+                    </div>
+                }
+                <button type="submit">Login</button>
+            </div>
+
+            <div class="text-center">
+                <a class="text-alert" href="/UserAuth/Registr">Not a user? SignUp</a>
+            </div>
         </div>
     </form>
 </body>

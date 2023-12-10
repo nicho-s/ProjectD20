@@ -1,4 +1,8 @@
-﻿@model Lab4_5.ViewModels.UpdUserViewModel
+﻿@using Microsoft.AspNetCore.Identity
+@model GameForum.ViewModels.UpdUserViewModel
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
 <style>
     .container1 {
         display: flex;
@@ -41,57 +45,60 @@
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <input asp-for="Id" type="hidden" />
 
-                <div class="form-group">
+                    <div class="form-group">
 
-                    <label asp-for="Name" class="control-label">
-                        <strong>Ім'я:</strong> @Model.Name
-                    </label>
+                        <label asp-for="Name" class="control-label">
+                            <strong>Ім'я:</strong> @Model.Name
+                        </label>
 
-                    <input asp-for="Name" class="form-control" />
-                    <span asp-validation-for="Name" class="text-danger"></span>
-                </div>
-                <p></p>
-                <div class="form-group">
+                        <input asp-for="Name" class="form-control" value="@Model.Name"/>
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+                    <p></p>
+                    <div class="form-group">
 
-                    <label  asp-for="UserName" class="control-label">
-                        <strong>Псевдонім:</strong> @Model.UserName
-                    </label>
+                        <label asp-for="UserName" class="control-label">
+                            <strong>Псевдонім:</strong> @Model.UserName
+                        </label>
 
-                    <input  asp-for="UserName" class="form-control" />
-                    <span asp-validation-for="UserName" class="text-danger"></span>
-                </div>
-                <p></p>
-                <div class="form-group">
-                    <label hidden asp-for="ProfilePicture" class="control-label"></label>
-                    <input hidden asp-for="ProfilePicture" class="form-control" />
-                    <span asp-validation-for="ProfilePicture" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="Description" class="control-label"> 
-                        <strong>Про себе:</strong> @Model.Description
-                    </label>
-                    <input asp-for="Description" class="form-control" />
-                    <span asp-validation-for="Description" class="text-danger"></span>
-                </div>
-                <p></p>
-                <div class="form-group">
-                    <label asp-for="BirthDay" class="control-label">
-                        <strong>День народження:</strong> @Model.FormattedBirthDay
-                    </label>
-                    <input asp-for="BirthDay" class="form-control" />
-                    <span asp-validation-for="BirthDay" class="text-danger"></span>
-                </div>
-                <p></p>
-                <div class="form-group">
-                    <label for="Sex"> 
-                        <strong>Стать:</strong> @Model.Sex</label>
-                    <select class="form-control" asp-for="Sex">
-                        <option value="Man">Чоловіча</option>
-                        <option value="Woman">Жіноча</option>
-                        <option value="Knight">Лицар</option>
-                    </select>
-                    <span asp-validation-for="Sex" class="text-danger"></span>
-                </div>
+                        <input asp-for="UserName" class="form-control" value="@Model.UserName" />
+                        <span asp-validation-for="UserName" class="text-danger"></span>
+                    </div>
+                    <p></p>
+                    <div class="form-group">
+                        <label hidden asp-for="ProfilePicture" class="control-label"></label>
+                        <input hidden asp-for="ProfilePicture" class="form-control" value="@Model.ProfilePicture" />
+                        <span asp-validation-for="ProfilePicture" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Description" class="control-label">
+                            <strong>Про себе:</strong> @Model.Description
+                        </label>
+                        <input asp-for="Description" class="form-control" value="@Model.Description" />
+                        <span asp-validation-for="Description" class="text-danger"></span>
+                    </div>
+                    <p></p>
+                    <div class="form-group">
+                        <label asp-for="BirthDay" class="control-label">
+                            <strong>День народження:</strong> @Model.FormattedBirthDay
+                        </label>
+                        <input asp-for="BirthDay" class="form-control" value="@Model.BirthDay" />
+                        <span asp-validation-for="BirthDay" class="text-danger"></span>
+                    </div>
+                    <p></p>
+                    <div class="form-group">
+                        <label for="Sex">
+                            <strong>Стать:</strong> @Model.Sex
+                        </label>
+                        <select class="form-control" asp-for="Sex" value="@Model.Sex">
+                            <option value="Man">Чоловіча</option>
+                            <option value="Woman">Жіноча</option>
+                            <option value="Knight">Лицар</option>
+                        </select>
+                        <span asp-validation-for="Sex" class="text-danger"></span>
+                    </div>
+                
+
                 <p></p>
                 <div class="form-group">
                     <input type="submit" value="Save" class="btn btn-primary" />
@@ -108,9 +115,3 @@
         </div>
     </div>
 </div>
-
-@section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
-}

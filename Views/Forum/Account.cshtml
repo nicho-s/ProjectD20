@@ -1,4 +1,4 @@
-﻿@model Lab4_5.ViewModels.UserViewModel
+﻿@model GameForum.ViewModels.UserViewModel
 @using System.Web
 @using Microsoft.AspNetCore.Identity
 @inject SignInManager<ApplicationUser> SignInManager
@@ -81,6 +81,18 @@
 
                     <dt class="col-sm-3">День народження:</dt>
                     <dd class="col-sm-9">@Html.DisplayFor(model => model.FormattedBirthDay)</dd>
+                    
+                    @if (Model.IsBanned == true)
+                    {
+                        <dt class="col-sm-3">Перманентний бан:</dt>
+                        <dd class="col-sm-9">Присутній</dd>
+                    }
+
+                    @if (Model.IsMuted == true)
+                    {
+                        <dt class="col-sm-3">Тимчасовий мут:</dt>
+                        <dd class="col-sm-9">Присутній</dd>
+                    }
 
                     <dt class="col-sm-3">Стать:</dt>
                     <dd class="col-sm-9">
@@ -100,10 +112,10 @@
                                 break;
                         }
                     </dd>
+
                     <div class="d-flex justify-content-between">
                         @if (SignInManager.IsSignedIn(User))
                         {
-                            // Перевірка, чи користувач - автор
                             if (UserManager.GetUserId(User) == Model.Id)
                             {
                                 <form clas="form-button" asp-controller="Forum" asp-action="Edit" method="get" asp-route-id="@Model.Id">
@@ -111,6 +123,50 @@
                                         Редагувати
                                     </button>
                                 </form>
+                            }
+
+                            if (User.IsInRole("Admin") && UserManager.GetUserId(User) != Model.Id)
+                            {
+                                <div class="form-group">
+                                    @if (Model.IsBanned == false)
+                                    {
+                                        <form clas="form-button" asp-action="Ban" asp-route-id="@Model.Id">
+                                            <button class="form-button" class="btn btn-secondary ml-2">
+                                                Заблокувати
+                                            </button>
+                                        </form>
+                                    }
+                                    else
+                                    {
+                                        <form clas="form-button" asp-action="UnBan" asp-route-id="@Model.Id">
+                                            <button class="form-button" class="btn btn-secondary ml-2">
+                                                Розблокувати
+                                            </button>
+                                        </form>
+                                    }
+                                </div>
+                            }
+
+                            if (User.IsInRole("Admin") && UserManager.GetUserId(User) != Model.Id)
+                            {
+                                <div class="form-group">
+                                    @if (Model.IsMuted == false)
+                                    {
+                                        <form clas="form-button" asp-action="Mute" asp-route-id="@Model.Id">
+                                            <button class="form-button" class="btn btn-secondary ml-2">
+                                                Заморозити
+                                            </button>
+                                        </form>
+                                    }
+                                    else
+                                    {
+                                        <form clas="form-button" asp-action="UnMute" asp-route-id="@Model.Id">
+                                            <button class="form-button" class="btn btn-secondary ml-2">
+                                                Розморозити
+                                            </button>
+                                        </form>
+                                    }
+                                </div>
                             }
                         }
                     </div>

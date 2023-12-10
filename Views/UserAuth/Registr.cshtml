@@ -9,60 +9,142 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/" asp-append-version="true" />
+
+    <style>
+        body {
+            background-color: rgba(0, 0, 0, 0.8);
+            color: wheat;
+            margin: 0; /* Remove default margin */
+        }
+
+        .center-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .login-form {
+            background-color: rgba(0, 0, 0, 0.8);
+            border-radius: 3px;
+            padding: 20px;
+            width: 60%; /* Set the width of the form */
+            max-width: 400px; /* Set a maximum width to prevent it from becoming too wide */
+            margin: 0 auto; /* Center the form horizontally */
+            margin-top: 50px; /* Add some top margin */
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+            text-align: left; /* Left-align text within form-group */
+        }
+
+        .form-control,
+        select.form-control {
+            border-radius: 3px;
+            background-color: rgba(0, 0, 0, 0.8);
+            color: wheat;
+            height: 38px;
+            box-sizing: border-box;
+            margin-bottom: 15px; /* Add margin to form controls */
+        }
+
+            .form-control::placeholder {
+                color: wheat;
+            }
+
+        .date-input-group {
+            position: relative;
+        }
+
+            .date-input-group input {
+                padding-right: 30px;
+            }
+
+            .date-input-group span {
+                position: absolute;
+                right: 10px;
+                top: 50%;
+                transform: translateY(-50%);
+                cursor: pointer;
+            }
+
+        .btn-login {
+            border-radius: 3px;
+            background-color: #007bff;
+            color: wheat;
+            border: 1px solid #007bff;
+            transition: background-color 0.3s;
+        }
+
+            .btn-login:hover {
+                background-color: #0056b3;
+            }
+    </style>
 </head>
 
-                
-<form class="login-form" asp-action="Registr" method="post">
-    <div class="form-group">
-        <input type="text" class="name-box" asp-for="Name" placeholder="Введіть ваше ім'я" />
-        <span class="text-danger" asp-validation-for="Name"></span>
-    </div>
-
-    <div class="form-group">
-        <input type="text" class="name-box" asp-for="Username" placeholder="Введіть псевдонім" />
-        <span class="text-danger" asp-validation-for="Username"></span>
-    </div>
-
-    <div class="form-group">
-        <input type="text" class="name-box" asp-for="Email" placeholder="Введіть пошту" />
-        <span class="text-danger" asp-validation-for="Email"></span>
-
-    </div>
-
-    <div class="form-group">
-        <input type="password" class="name-box" asp-for="Password" placeholder="Введіть пароль" />
-        <span class="text-danger" asp-validation-for="Password"></span>
-
-    </div>
-
-    <div class="form-group">
-        <input type="password" class="name-box" asp-for="PasswordConfirm" placeholder="Повторіть пароль" />
-        <span class="text-danger" asp-validation-for="PasswordConfirm"></span>
-
-    </div>
-
-    <div class="form-group">
-        <input type="date" class="form-control" asp-for="BirthDay" />
-        <span asp-validation-for="BirthDay" class="text-danger"></span>
-
-    </div>
-
-    <div class="form-group">
-        <label for="Sex">Стать:</label>
-        <select class="form-control" asp-for="Sex">
-            <option value="Male">Чоловіча</option>
-            <option value="Female">Жіноча</option>
-            <option value="Knight">Лицар</option>
-        </select>
-        <span asp-validation-for="Sex" class="text-danger"></span>
-    </div>
-
-    @if (TempData["msg"] != null)
-    {
+<div class="center-container">
+    <form class="login-form text-center" asp-action="Registr" method="post">
         <div class="form-group">
-            <span class="text-info">@TempData["msg"]</span>
+            <a>Ім'я</a>
+            <input type="text" class="form-control" asp-for="Name" />
+            <span class="text-danger" asp-validation-for="Name"></span>
         </div>
-    }
-    <button type="submit" class="btn btn-info">Registration</button>
-    <a class="btn btn-primary" href="/UserAuth/Login">Login</a>
-</form>
+
+        <div class="form-group">
+            <a>Псевдонім</a>
+            <input type="text" class="form-control" asp-for="Username" />
+            <span class="text-danger" asp-validation-for="Username"></span>
+        </div>
+
+        <div class="form-group">
+            <a>Пошта</a>
+            <input type="text" class="form-control" asp-for="Email" />
+            <span class="text-danger" asp-validation-for="Email"></span>
+        </div>
+
+        <div class="form-group">
+            <a>Пароль</a>
+            <input type="password" class="form-control" asp-for="Password" />
+            <span class="text-danger" asp-validation-for="Password"></span>
+        </div>
+
+        <div class="form-group">
+            <a>Підтвердити пароль</a>
+            <input type="password" class="form-control" asp-for="PasswordConfirm" />
+            <span class="text-danger" asp-validation-for="PasswordConfirm"></span>
+        </div>
+
+        <div class="form-group">
+            <a>День народження</a>
+            <div class="date-input-group">
+                <input type="date" class="form-control" asp-for="BirthDay" />
+            </div>
+            <span asp-validation-for="BirthDay" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label for="Sex">Стать</label>
+            <select class="form-control" asp-for="Sex">
+                <option value="Man">Чоловіча</option>
+                <option value="Woman">Жіноча</option>
+                <option value="Knight">Лицар</option>
+            </select>
+            <span asp-validation-for="Sex" class="text-danger"></span>
+        </div>
+
+        @if (TempData["msg"] != null)
+        {
+            <div class="form-group">
+                <span class="text-info">@TempData["msg"]</span>
+            </div>
+        }
+        <div class="text-center">
+            <button type="submit" class="btn btn-login">Реєстрація</button>
+        </div>
+        
+        <div class="text-center">
+            <a href="/UserAuth/Login">Уже зареєстровані? Увійти</a>
+        </div>
+    </form>
+</div>

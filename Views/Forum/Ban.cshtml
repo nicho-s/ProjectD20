@@ -1,4 +1,5 @@
-﻿@model GameForum.Models.Review
+﻿@model GameForum.ViewModels.BanUserViewModel
+
 @{
 }
 
@@ -32,11 +33,11 @@
 
 <p></p>
 
-<form asp-action="Delete" class="styled-form">
-    <input type="hidden" asp-for="Id" />
+<form asp-action="Ban" asp-route-id="@Model.id" method="post" class="styled-form">
     <div class="form-group">
         <label>Підтвердження:</label>
-        <p>Ви впевнені, що варто бажаєте видалити повідомлення?</p>
+        <p>Ви впевнені, що варто заблокувати користувача?</p>
     </div>
-    <input type="submit" value="Видалити" class="btn btn-danger">
+
+    <button type="submit" class="btn btn-danger">Заблокувати</button>
 </form>

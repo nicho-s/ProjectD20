@@ -1,9 +1,9 @@
 ﻿@using System.Web
-@using Microsoft.AspNetCore.Identity
 @model GameForum.Models.Topic
+
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
-
+@using Microsoft.AspNetCore.Identity
 @{
 }
 
@@ -29,6 +29,11 @@
         }
 
         .del {
+            width: 50px;
+            height: 50px;
+        }
+
+        .own {
             width: 50px;
             height: 50px;
         }
@@ -86,8 +91,6 @@
             <h4>@Html.DisplayFor(model => model.Title)</h4>
         </div>
 
-        
-
         <div class="box-details">
             @if (!string.IsNullOrEmpty(Model?.User?.Name))
             {
@@ -102,7 +105,6 @@
         </div>
 
 
-
         <div class="box-description">
             <p>@Html.Raw(HttpUtility.HtmlDecode(Model.Description))</p>
         </div>
@@ -110,21 +112,35 @@
         <div class="box-actions">
             @if (SignInManager.IsSignedIn(User))
             {
-                // Перевірка, чи користувач - автор
-                if (UserManager.GetUserId(User) == Model?.User?.Id)
+                var user = await UserManager.GetUserAsync(User);
+
+                if ((UserManager.GetUserId(User) == Model?.User?.Id) && (user.IsMuted == false))
                 {
                     <a asp-action="Edit" asp-route-id="@Model?.Id"><img src="~/css/whitered.png" class="own" /></a>
                 }
 
-                // Перевірка, чи користувач - автор або адміністратор
-                if (UserManager.GetUserId(User) == Model?.User?.Id || User.IsInRole("Admin"))
+                if (((UserManager.GetUserId(User) == Model?.User?.Id) && (user.IsMuted == false)) || User.IsInRole("Admin"))
                 {
                     <a asp-action="Delete" asp-route-id="@Model?.Id"><img src="~/css/whotedel.png" class="del" /></a>
                 }
+
+                if (User.IsInRole("Admin"))
+                {
+                    @if (Model?.IsHidden == false)
+                    {
+                        <form clas="form-button">
+                            <a asp-action="Hide" asp-route-id="@Model?.Id">Приховати</a>
+                        </form>
+                    }
+                    else
+                    {
+                        <form clas="form-button">
+                            <a asp-action="UnHide" asp-route-id="@Model?.Id">Показати</a>
+                        </form>
+                    }
+                }
             }
         </div>
-
-
     </div>
 
     <div class="review-box" disabled>
@@ -133,48 +149,74 @@
             <div class="review-container">
                 @foreach (var review in Model.Reviews)
                 {
-                    <div class="user-comment">
-                        <div class="user-info">
-                            @switch (@review.User.Sex)
-                            {
-                                case "Man":
-                                    <img src="~/css/Man.jpg" class="user-image" />
-                                    break;
-                                case "Woman":
-                                    <img src="~/css/Woman.jpg" class="user-image" />
-                                    break;
-                                case "Knight":
-                                    <img src="~/css/Knight.jpg" class="user-image" />
-                                    break;
-                                default:
-                                    <img src="~/css/Knight.jpg" class="user-image" />
-                                    break;
-                            }
-                            <a href="/Forum/Account/@review.User.Id" class="user-link"><strong>@review.User.UserName</strong></a>
+                    if (review.IsHidden == true)
+                    {
+                        <div class="user-comment">
+                            <div class="user-info">
+                                Повідомлення було приховано
+                            </div>
                         </div>
-                        <div>
+                    }
+                    else
+                    {
+                        <div class="user-comment">
+                            <div class="user-info">
+                                @switch (@review.User.Sex)
+                                {
+                                    case "Man":
+                                        <img src="~/css/Man.jpg" class="user-image" />
+                                        break;
+                                    case "Woman":
+                                        <img src="~/css/Woman.jpg" class="user-image" />
+                                        break;
+                                    case "Knight":
+                                        <img src="~/css/Knight.jpg" class="user-image" />
+                                        break;
+                                    default:
+                                        <img src="~/css/Knight.jpg" class="user-image" />
+                                        break;
+                                }
+                                <a href="/Forum/Account/@review.User.Id" class="user-link"><strong>@review.User.UserName</strong></a>
+                            </div>
+                            <div>
                                 <p>@Html.Raw(HttpUtility.HtmlDecode(review.Text))</p>
-                        </div>
-                        @if (SignInManager.IsSignedIn(User))
-                        {
-                            // Перевірка, чи користувач - автор
-                            if (UserManager.GetUserId(User) == @review.User.Id)
+                            </div>
+                            @if (SignInManager.IsSignedIn(User))
                             {
-                                <a asp-controller="Reviews" asp-action="Edit" asp-route-id="@review.Id">
-                                    <img src="~/css/whitered.png" class="own" />
-                                </a>
-                            }
+                                var user = await UserManager.GetUserAsync(User);
 
-                            // Перевірка, чи користувач - автор або адміністратор
-                            if (UserManager.GetUserId(User) == @review.User.Id || User.IsInRole("Admin"))
-                            {
-                                <a asp-controller="Reviews" asp-action="Delete" asp-route-id="@review.Id">
-                                    <img src="~/css/whotedel.png" class="del" />
-                                </a>
+                                if ((UserManager.GetUserId(User) == Model?.User?.Id) && (user.IsMuted == false))
+                                {
+                                    <a asp-controller="Reviews" asp-action="Edit" asp-route-id="@review.Id">
+                                        <img src="~/css/whitered.png" class="own" />
+                                    </a>
+                                }
+
+                                if ((UserManager.GetUserId(User) == Model?.User?.Id) && (user.IsMuted == false) || User.IsInRole("Admin"))
+                                {
+                                    <a asp-controller="Reviews" asp-action="Delete" asp-route-id="@review.Id">
+                                        <img src="~/css/whotedel.png" class="del" />
+                                    </a>
+                                }
+
+                                if (User.IsInRole("Admin"))
+                                {
+                                    @if (review.IsHidden == false)
+                                    {
+                                        <form clas="form-button">
+                                            <a asp-controller="Reviews" asp-action="HideRev" asp-route-id="@Model?.Id">Приховати</a>
+                                        </form>
+                                    }
+                                    else
+                                    {
+                                        <form clas="form-button">
+                                            <a asp-controller="Reviews" asp-action="UnHideRev" asp-route-id="@Model?.Id">Показати</a>
+                                        </form>
+                                    }
+                                }
                             }
-                        }
-                    </div>
-                    
+                        </div>
+                    }
                 }
             </div>
         }
@@ -187,7 +229,22 @@
         }
     </div>
 
-    <button class="create-button" asp-controller="Reviews" asp-action="Create" asp-route-topicId="@Model?.Id">
-        Додати коментар
-    </button>
+
+    @if (SignInManager.IsSignedIn(User))
+    {
+        var user = await UserManager.GetUserAsync(User);
+
+        if (user.IsMuted == false)
+        {
+            <button class="create-button" asp-controller="Reviews" asp-action="Create" asp-route-topicId="@Model?.Id">
+                Додати коментар
+            </button>
+        }
+        else
+        {
+            <button class="create-button" href="#">
+                Додати коментар
+            </button>
+        }
+    }
 </form>

@@ -1,5 +1,5 @@
 ﻿using GameForum.Models.DTO;
-using Lab4_5.ViewModels;
+using GameForum.ViewModels;
 
 namespace GameForum.Repositories.Abstract
 {

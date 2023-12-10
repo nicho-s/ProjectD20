@@ -13,5 +13,6 @@
         {
             Reviews = new List<Review>();
         }
+        public bool IsHidden { get; set; }
     }
 }

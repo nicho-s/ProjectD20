@@ -2,7 +2,6 @@
 using GameForum.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -24,9 +23,6 @@ namespace Lab4_5.Controllers
         {
             List<Topic> topics = _context.Topics.Include(t => t.User).Include(t => t.Reviews).ToList();
             return View(topics);
-            //return _context.Topics != null ? 
-            //            View(await _context.Topics.ToListAsync()) :
-            //            Problem("Entity set 'ForumDBContext.Topics'  is null.");
         }
 
         // GET: Topics/Details/5
@@ -177,6 +173,38 @@ namespace Lab4_5.Controllers
         private bool TopicExists(int id)
         {
           return (_context.Topics?.Any(e => e.Id == id)).GetValueOrDefault();
+        }
+
+        public async Task<IActionResult> Hide(HideTopicViewModel model)
+        {
+            if (!ModelState.IsValid) return View(model);
+
+            var topic = await _context.Topics.FirstOrDefaultAsync(u => u.Id == model.Id);
+            if (topic == null) return NotFound();
+
+            if (!topic.IsHidden) topic.IsHidden = true;
+
+            _context.Topics.Update(topic);
+
+            await _context.SaveChangesAsync();
+
+            return View(model);
+        }
+
+        public async Task<IActionResult> UnHide(HideTopicViewModel model)
+        {
+            if (!ModelState.IsValid) return View(model);
+
+            var topic = await _context.Topics.FirstOrDefaultAsync(u => u.Id == model.Id);
+            if (topic == null) return NotFound();
+
+            if (topic.IsHidden) topic.IsHidden = false;
+
+            _context.Topics.Update(topic);
+
+            await _context.SaveChangesAsync();
+
+            return View(model);
         }
     }
 }
