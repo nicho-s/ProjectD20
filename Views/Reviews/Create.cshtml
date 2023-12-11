@@ -6,7 +6,6 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Форум</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/LAB1.styles.css" asp-append-version="true" />
@@ -19,18 +18,14 @@
         <div class="col-md-6 mx-auto">
             <form class="custom-box" asp-action="Create">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-
-                <!-- Використовуємо редактор тексту CKEditor -->
                 <div class="form-group">
-                    <textarea asp-for="Text" class="ckeditor form-control" placeholder="Введіть коментар"></textarea>
+                    <textarea asp-for="Text" class="ckeditor form-control" placeholder="@Localizer["Addcomm"]"></textarea>
                     <span asp-validation-for="Text" class="text-danger"></span>
                 </div>
-
-                <!-- Кнопки для створення та повернення -->
                 <div class="form-group mt-3">
                     <div class="d-flex justify-content-between">
-                        <button class="form-button" asp-controller="Forum" asp-action="Main" class="btn btn-secondary">Головна</button>
-                        <button class="form-button" type="submit" class="btn btn-primary">Створити</button>
+                        <button class="form-button" asp-controller="Forum" asp-action="Main" class="btn btn-secondary">@Localizer["Main"]</button>
+                        <button class="form-button" type="submit" class="btn btn-primary">@Localizer["Create"]</button>
                     </div>
                 </div>
             </form>
@@ -50,7 +45,7 @@
                             { model: 'heading2', view: 'h2', title: 'Heading 2', class: 'ck-heading_heading2' }
                         ]
                     },
-                    remove: ['imageUpload', 'mediaEmbed']  // Вилучення кнопок додавання фото і медіа
+                    remove: ['imageUpload', 'mediaEmbed'] 
                 })
                 .catch(error => {
                     console.error(error);

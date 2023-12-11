@@ -15,13 +15,13 @@
 
         <div class="container">
             <div class="text-center">
-                <label asp-for="Username"><a>Username</a></label>
+                <label asp-for="Username"><a>@Localizer["Username"]</a></label>
                 <input class="name-box" type="text" asp-for="Username" placeholder="Enter Username">
                 <div class="msg">
                     <span class="err" asp-validation-for="Username"></span>
                 </div>
 
-                <label asp-for="Password"><a>Password</a></label>
+                <label asp-for="Password"><a>@Localizer["Password"]</a></label>
                 <input class="name-box" type="password" asp-for="Password" placeholder="Enter Password">
                 <div class="msg">
                     <span asp-validation-for="Password" class="err"></span>

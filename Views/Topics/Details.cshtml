@@ -129,13 +129,13 @@
                     @if (Model?.IsHidden == false)
                     {
                         <form clas="form-button">
-                            <a asp-action="Hide" asp-route-id="@Model?.Id">Приховати</a>
+                            <a asp-action="Hide" asp-route-id="@Model?.Id">@Localizer["Hide"]</a>
                         </form>
                     }
                     else
                     {
                         <form clas="form-button">
-                            <a asp-action="UnHide" asp-route-id="@Model?.Id">Показати</a>
+                            <a asp-action="UnHide" asp-route-id="@Model?.Id">@Localizer["Show"]</a>
                         </form>
                     }
                 }
@@ -153,7 +153,7 @@
                     {
                         <div class="user-comment">
                             <div class="user-info">
-                                Повідомлення було приховано
+                                @Localizer["MesWasHidden"]
                             </div>
                         </div>
                     }
@@ -204,13 +204,13 @@
                                     @if (review.IsHidden == false)
                                     {
                                         <form clas="form-button">
-                                            <a asp-controller="Reviews" asp-action="HideRev" asp-route-id="@Model?.Id">Приховати</a>
+                                            <a asp-controller="Reviews" asp-action="HideRev" asp-route-id="@Model?.Id">@Localizer["Hide"]</a>
                                         </form>
                                     }
                                     else
                                     {
                                         <form clas="form-button">
-                                            <a asp-controller="Reviews" asp-action="UnHideRev" asp-route-id="@Model?.Id">Показати</a>
+                                            <a asp-controller="Reviews" asp-action="UnHideRev" asp-route-id="@Model?.Id">@Localizer["Show"]</a>
                                         </form>
                                     }
                                 }
@@ -237,13 +237,13 @@
         if (user.IsMuted == false)
         {
             <button class="create-button" asp-controller="Reviews" asp-action="Create" asp-route-topicId="@Model?.Id">
-                Додати коментар
+                @Localizer["Add message"]
             </button>
         }
         else
         {
             <button class="create-button" href="#">
-                Додати коментар
+                @Localizer["Add message"]
             </button>
         }
     }

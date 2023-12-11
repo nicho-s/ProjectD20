@@ -1,5 +1,8 @@
-﻿@{
+﻿@using Microsoft.AspNetCore.Mvc.Localization;
+@inject IViewLocalizer Localizer;
 
+
+@{
 }
 
 <head>
@@ -16,9 +19,7 @@
         <div class="row">
             <form class="main-box">
                 <p></p>
-                <p>Привіт, ти на форумі D20, колись, можливо, він переросте в щось більше ніж жахливий трай у переписку</p>
-                <p>Можливо колись ви зможете тут грати в ДнД і говорити на самі різні теми</p>
-                <p>Але зараз це лише чиясь курсова робота</p>
+                <p>@Localizer["Welcome"]</p>
                 <img src="~/css/dark-souls-bonfire.gif" alt="Гіфка" class="img-fluid">
                 <p></p>
             </form>

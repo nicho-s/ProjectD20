@@ -117,7 +117,19 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Topic" xml:space="preserve">
-    <value>Тема</value>
+  <data name="Hidden" xml:space="preserve">
+    <value>Hidden</value>
+  </data>
+  <data name="Hidden topic" xml:space="preserve">
+    <value>Hidden topic</value>
+  </data>
+  <data name="HiddenTitle" xml:space="preserve">
+    <value>This text has been hidden due to community policy issues, it will probably be removed soon</value>
+  </data>
+  <data name="NewPostButton" xml:space="preserve">
+    <value>Create post</value>
+  </data>
+  <data name="UknownUser" xml:space="preserve">
+    <value>Uknown user</value>
   </data>
 </root>

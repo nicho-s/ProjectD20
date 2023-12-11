@@ -35,9 +35,9 @@
 
 <form asp-action="Ban" asp-route-id="@Model.id" method="post" class="styled-form">
     <div class="form-group">
-        <label>Підтвердження:</label>
-        <p>Ви впевнені, що варто заблокувати користувача?</p>
+        <label>@Localizer["Confirm"]</label>
+        <p>@Localizer["ConfirmTitle"]Ви впевнені, що варто заблокувати користувача?</p>
     </div>
 
-    <button type="submit" class="btn btn-danger">Заблокувати</button>
+    <button type="submit" class="btn btn-danger">@Localizer["Ban"]Заблокувати</button>
 </form>

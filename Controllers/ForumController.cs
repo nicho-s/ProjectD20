@@ -221,5 +221,16 @@ namespace Lab4_5.Controllers
 
             return View(model);
         }
+
+        [HttpPost]
+        public IActionResult SetCulture(string culture, string returnUrl)
+        {
+            Response.Cookies.Append(
+                CookieRequestCultureProvider.DefaultCookieName,
+                CookieRequestCultureProvider.MakeCookieValue(new RequestCulture(culture)),
+                new CookieOptions { Expires = DateTimeOffset.UtcNow.AddDays(30) }
+            );
+            return LocalRedirect(returnUrl);
+        }
     }
 }

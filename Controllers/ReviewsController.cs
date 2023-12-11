@@ -128,9 +128,16 @@ namespace Lab4_5.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Text,CreatingTime")] Review review)
+        public async Task<IActionResult> Edit(int id, UpdReviewViewModel model)
         {
-            if (id != review.Id)
+            if (id != model.Id)
+            {
+                return NotFound();
+            }
+
+            var review = await _context.Reviews.FindAsync(id);
+
+            if (review == null)
             {
                 return NotFound();
             }
@@ -139,6 +146,7 @@ namespace Lab4_5.Controllers
             {
                 try
                 {
+                    review.Text = model.Text;
                     _context.Update(review);
                     await _context.SaveChangesAsync();
                 }
@@ -153,7 +161,7 @@ namespace Lab4_5.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index", "Topics");
             }
             return View(review);
         }

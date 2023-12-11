@@ -55,14 +55,12 @@
                             <a class="nav-link text-wheat" href="/Forum/Main">D20</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-wheat" href="/Topics/Index">Теми</a>
+                            <a class="nav-link text-wheat" href="/Topics/Index">@Localizer["Topics"]</a>
                         </li>
-@*                         <li class="nav-item">
-                            <a class="nav-link text-wheat" href="#">Повідомлення</a>
-                        </li> *@
-@*                         <li>
-                            @await Html.PartialAsync("_LanguagePartial")
-                        </li> *@
+                        <li class="nav-item">
+                            <a class="nav-link text-wheat" href="#">@Localizer["Messages"]</a>
+                        </li> 
+                        
                     </ul>
                 </div>
 
@@ -71,12 +69,12 @@
                     
                     <ul class="navbar-nav ml-auto">
                         <li class="nav-item">
-                            <a class="nav-link text-wheat" href="/Forum/Account/@UserManager.GetUserId(User)">Профіль</a>
+                            <a class="nav-link text-wheat" href="/Forum/Account/@UserManager.GetUserId(User)">@Localizer["Profile"]</a>
                         </li>
                     </ul>
                     <ul class="navbar-nav ml-auto">
                         <li class="nav-item">
-                            <a class="nav-link text-wheat" href="/UserAuth/Logout">Вийти</a>
+                            <a class="nav-link text-wheat" href="/UserAuth/Logout">@Localizer["Exit"]</a>
                         </li>
                     </ul>
                 }
@@ -84,16 +82,21 @@
                 {
                     <ul class="navbar-nav ml-auto">
                         <li class="nav-item">
-                            <a class="nav-link text-wheat" href="/UserAuth/Login">Увійти</a>
+                            <a class="nav-link text-wheat" href="/UserAuth/Login">@Localizer["SignIn"]</a>
                         </li>
                     </ul>
 
                     <ul class="navbar-nav ml-auto">
                         <li class="nav-item">
-                            <a class="nav-link text-wheat" href="/UserAuth/Registr">Реєстрація</a>
+                            <a class="nav-link text-wheat" href="/UserAuth/Registr">@Localizer["SignUp"]</a>
                         </li>
                     </ul>
                 }
+                <ul>
+                    <li>
+                        @await Html.PartialAsync("_LanguagePartial")
+                    </li>
+                </ul>
             </div>
         </nav>
     </header>

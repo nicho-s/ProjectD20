@@ -63,35 +63,35 @@
             </div>
 
             <div class="profile-info">
-                <h4 class="card-title text-center">Про користувача</h4>
+                <h4 class="card-title text-center">@Localizer["About"]</h4>
                 <hr />
 
                 <dl class="row">
-                    <dt class="col-sm-3">Ім'я:</dt>
+                    <dt class="col-sm-3">@Localizer["Name"]</dt>
                     <dd class="col-sm-9">@Html.DisplayFor(model => model.Name)</dd>
 
-                    <dt class="col-sm-3">Псевдонім:</dt>
+                    <dt class="col-sm-3">@Localizer["Username"]</dt>
                     <dd class="col-sm-9">@Html.DisplayFor(model => model.UserName)</dd>
 
-                    <dt class="col-sm-3">Вік:</dt>
+                    <dt class="col-sm-3">@Localizer["Age"]</dt>
                     <dd class="col-sm-9">@Html.DisplayFor(model => model.Age)</dd>
 
-                    <dt class="col-sm-3">Про себе:</dt>
+                    <dt class="col-sm-3">@Localizer["Aboutself"]</dt>
                     <dd class="col-sm-9">@Html.DisplayFor(model => model.Description)</dd>
 
-                    <dt class="col-sm-3">День народження:</dt>
+                    <dt class="col-sm-3">@Localizer["Birthday"]:</dt>
                     <dd class="col-sm-9">@Html.DisplayFor(model => model.FormattedBirthDay)</dd>
                     
                     @if (Model.IsBanned == true)
                     {
-                        <dt class="col-sm-3">Перманентний бан:</dt>
-                        <dd class="col-sm-9">Присутній</dd>
+                        <dt class="col-sm-3">@Localizer["IsBan"]</dt>
+                        <dd class="col-sm-9">@Localizer["hav"]</dd>
                     }
 
                     @if (Model.IsMuted == true)
                     {
-                        <dt class="col-sm-3">Тимчасовий мут:</dt>
-                        <dd class="col-sm-9">Присутній</dd>
+                        <dt class="col-sm-3">@Localizer["IsMute"]</dt>
+                        <dd class="col-sm-9">@Localizer["hav"]</dd>
                     }
 
                     <dt class="col-sm-3">Стать:</dt>
@@ -99,13 +99,13 @@
                         @switch (Model.Sex)
                         {
                             case "Man":
-                                <p>Чоловік</p>
+                                <p>@Localizer["Man"]</p>
                                 break;
                             case "Woman":
-                                <p>Жінка</p>
+                                <p>@Localizer["Woman"]</p>
                                 break;
                             case "Knight":
-                                <p>Лицар</p>
+                                <p>@Localizer["Knight"]</p>
                                 break;
                             default:
                                 <p>_______</p>
@@ -120,7 +120,7 @@
                             {
                                 <form clas="form-button" asp-controller="Forum" asp-action="Edit" method="get" asp-route-id="@Model.Id">
                                     <button class="form-button" class="btn btn-secondary ml-2">
-                                        Редагувати
+                                        @Localizer["Redact"]
                                     </button>
                                 </form>
                             }
@@ -132,7 +132,7 @@
                                     {
                                         <form clas="form-button" asp-action="Ban" asp-route-id="@Model.Id">
                                             <button class="form-button" class="btn btn-secondary ml-2">
-                                                Заблокувати
+                                                @Localizer["Ban"]
                                             </button>
                                         </form>
                                     }
@@ -140,7 +140,7 @@
                                     {
                                         <form clas="form-button" asp-action="UnBan" asp-route-id="@Model.Id">
                                             <button class="form-button" class="btn btn-secondary ml-2">
-                                                Розблокувати
+                                                @Localizer["Unban"]
                                             </button>
                                         </form>
                                     }
@@ -154,7 +154,7 @@
                                     {
                                         <form clas="form-button" asp-action="Mute" asp-route-id="@Model.Id">
                                             <button class="form-button" class="btn btn-secondary ml-2">
-                                                Заморозити
+                                                @Localizer["Silent"]
                                             </button>
                                         </form>
                                     }
@@ -162,7 +162,7 @@
                                     {
                                         <form clas="form-button" asp-action="UnMute" asp-route-id="@Model.Id">
                                             <button class="form-button" class="btn btn-secondary ml-2">
-                                                Розморозити
+                                                @Localizer["Unsilent"]
                                             </button>
                                         </form>
                                     }

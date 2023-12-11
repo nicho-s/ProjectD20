@@ -35,8 +35,8 @@
 <form asp-action="Delete" class="styled-form">
     <input type="hidden" asp-for="Id" />
     <div class="form-group">
-        <label>Підтвердження:</label>
-        <p>Ви впевнені, що варто бажаєте видалити повідомлення?</p>
+        <label>@Localizer["Confirmation"]</label>
+        <p>@Localizer["ConfirmTitle"]</p>
     </div>
-    <input type="submit" value="Видалити" class="btn btn-danger">
+    <input type="submit" value="@Localizer["Delete"]" class="btn btn-danger">
 </form>

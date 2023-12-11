@@ -36,9 +36,9 @@
 
 <form asp-action="UnHide" asp-route-id="@Model.Id" method="post" class="styled-form">
     <div class="form-group">
-        <label>Підтвердження:</label>
-        <p>Ви впевнені, що варто показати тему?</p>
+        <label>@Localizer["Confirmation"]</label>
+        <p>@Localizer["ConfirmTitle"]</p>
     </div>
 
-    <button type="submit" class="btn btn-danger">Показати</button>
+    <button type="submit" class="btn btn-danger">@Localizer["Unhide"]</button>
 </form>

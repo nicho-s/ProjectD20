@@ -23,7 +23,7 @@
             <form class="mx-auto text-center">
                 <button class="custom-box">
                     <div class="box-title">
-                        <h4>Прихована тема</h4>
+                        <h4>@Localizer["Hidden topic"]</h4>
                     </div>
 
                     <style>
@@ -39,14 +39,13 @@
                     </style>
 
                     <div class="box-details">
-                            <span class="box-user">Приховано</span>
+                            <span class="box-user">@Localizer["Hidden"]</span>
                         <span>, </span>
-                        <span class="box-createdat">Приховано</span>
+                        <span class="box-createdat">@Localizer["Hidden"]</span>
                     </div>
 
                     <p class="box-description">
-                        Цю тему було приховано через проблеми із правилами спільноти,
-                        імовірно скоро вона буде видалена
+                        @Localizer["HiddenTitle"]
                     </p>
                 </button>
             </form>
@@ -80,7 +79,7 @@
                         }
                         else
                         {
-                            <span class="box-user">Невідомий</span>
+                            <span class="box-user">@Localizer["UknownUser"]</span>
                         }
                         <span>, </span>
                         <span class="box-createdat">@topic.CreatingTime</span>
@@ -103,7 +102,7 @@
     {
         <form method="get" asp-controller="Topics" asp-action="Create">
             <button class="create-button">
-                <p>Новий пост</p>
+                <p>@Localizer["NewPostButton"]</p>
             </button>
         </form>
     }
@@ -111,7 +110,7 @@
     {
         <form href="#">
             <button class="create-button">
-                <p>Новий пост</p>
+                <p>@Localizer["NewPostButton"]</p>
             </button>
         </form>
     }

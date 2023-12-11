@@ -1,21 +1,60 @@
-﻿@using Microsoft.AspNetCore.Localization;
-@using Microsoft.Extensions.Options;
+﻿﻿@using Microsoft.AspNetCore.Localization
+@using Microsoft.Extensions.Options
 
-@inject IOptions<RequestLocalizationOptions> LocOptions
+@inject IOptions<RequestLocalizationOptions> LocalizationOptions
 @{
     var requestCulture = Context.Features.Get<IRequestCultureFeature>();
-    var cultureItems = LocOptions.Value.SupportedUICultures
-        .Select(c => new SelectListItem { Value = c.Name, Text = c.DisplayName })
+
+    var cultureItems = LocalizationOptions.Value.SupportedUICultures
+        .Select(c => new SelectListItem { Value = c.Name, Text = c.Name })
         .ToList();
+
+    var returnUrl = string.IsNullOrEmpty(Context.Request.Path) ? "~/" : $"~{Context.Request.Path.Value}{Context.Request.QueryString}";
 }
 
+<style>
+    /* Style the entire form element */
+    .nav-link1 {
+        color: wheat;
+        background-color: rgba(0, 0, 0, 0.4);
+        padding: 5px;
+        border-radius: 5px;
+    }
+
+        /* Style the select element */
+        .nav-link1 select {
+            border: none;
+            background-color: transparent;
+            color: inherit;
+            padding: 5px;
+            font-size: 16px;
+        }
+
+            /* Style the option elements */
+            .nav-link1 select option {
+                background-color: rgba(0, 0, 0, 0.6);
+                color: wheat;
+                padding: 5px;
+                border-radius: 5px;
+            }
+
+                /* Style the option element on hover */
+                .nav-link1 select option:hover {
+                    background-color: rgba(0, 0, 0, 0.8); /* Adjust hover color as needed */
+                }
+
+    /* Add a top margin to the form */
+    .nav-link1 {
+        margin-top: 10px;
+    }
+</style>
+
 <div>
-    <form asp-controller="Forum"
-          asp-action="SetLanguage"
-          asp-route-returnUrl="@Context.Request.Path" method="post">
-        <select name="culture" onchange="this.form.submit();"
+    <form asp-controller="Forum" asp-action="SetCulture" asp-route-returnUrl="@returnUrl" class="nav-link1">
+        <select name="culture"
+                onchange="this.form.submit();"
                 asp-for="@requestCulture.RequestCulture.UICulture.Name"
-                asp-items="cultureItems" class="form-select-sm">
+                asp-items="cultureItems">
         </select>
     </form>
 </div>
