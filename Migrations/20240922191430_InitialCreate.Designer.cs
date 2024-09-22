@@ -9,11 +9,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace Lab4_5.Migrations
+namespace GameForum.Migrations
 {
     [DbContext(typeof(ForumDBContext))]
-    [Migration("20231210225658_Aplly9")]
-    partial class Aplly9
+    [Migration("20240922191430_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -50,6 +50,9 @@ namespace Lab4_5.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
+                    b.Property<int>("FailedLoginAttempts")
+                        .HasColumnType("int");
+
                     b.Property<bool>("IsBanned")
                         .HasColumnType("bit");
 
@@ -59,8 +62,8 @@ namespace Lab4_5.Migrations
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
 
-                    b.Property<DateTimeOffset?>("LockoutEnd")
-                        .HasColumnType("datetimeoffset");
+                    b.Property<DateTime?>("LockoutEnd")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
@@ -175,6 +178,22 @@ namespace Lab4_5.Migrations
                     b.ToTable("Topics");
                 });
 
+            modelBuilder.Entity("GameForum.ViewModels.HideReviewViewModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("IsHidden")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("HideReviewViewModel");
+                });
+
             modelBuilder.Entity("GameForum.ViewModels.HideTopicViewModel", b =>
                 {
                     b.Property<int>("Id")
@@ -200,7 +219,6 @@ namespace Lab4_5.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
