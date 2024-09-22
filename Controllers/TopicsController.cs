@@ -18,12 +18,14 @@ namespace Lab4_5.Controllers
             _context = context;
         }
 
+        // GET: Topics
         public IActionResult Index()
         {
             List<Topic> topics = _context.Topics.Include(t => t.User).Include(t => t.Reviews).ToList();
             return View(topics);
         }
 
+        // GET: Topics/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.Topics == null)
@@ -46,11 +48,15 @@ namespace Lab4_5.Controllers
         }
 
         [Authorize]
+        // GET: Topics/Create
         public IActionResult Create()
         {
             return View();
         }
 
+        // POST: Topics/Create
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]
@@ -71,6 +77,7 @@ namespace Lab4_5.Controllers
             return View(model);
         }
 
+        // GET: Topics/Edit/5
         [Authorize]
         public async Task<IActionResult> Edit(int? id)
         {
@@ -87,6 +94,9 @@ namespace Lab4_5.Controllers
             return View(topic);
         }
 
+        // POST: Topics/Edit/5
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
@@ -121,6 +131,7 @@ namespace Lab4_5.Controllers
             return View(model);
         }
 
+        // GET: Topics/Delete/5
         [Authorize]
         public async Task<IActionResult> Delete(int? id)
         {
@@ -139,6 +150,7 @@ namespace Lab4_5.Controllers
             return View(topic);
         }
 
+        // POST: Topics/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         [Authorize]

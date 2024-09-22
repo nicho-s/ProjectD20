@@ -123,16 +123,6 @@
                                         @Localizer["Redact"]
                                     </button>
                                 </form>
-                                <form clas="form-button" asp-controller="Forum" asp-action="ChangePassword" method="get" asp-route-id="@Model.Id">
-                                    <button class="form-button" class="btn btn-secondary ml-2">
-                                        Change password
-                                    </button>
-                                </form>
-                                <form clas="form-button" asp-controller="UserAuth" asp-action="UserList" method="get">
-                                    <button class="form-button" class="btn btn-secondary ml-2">
-                                        Search???
-                                    </button>
-                                </form>
                             }
 
                             if (User.IsInRole("Admin") && UserManager.GetUserId(User) != Model.Id)

@@ -13,7 +13,5 @@ namespace GameForum.Models
         public List<Review>? Reviews { get; set; } = new List<Review>();
         public bool IsBanned { get; set; }
         public bool IsMuted { get; set; }
-        public int FailedLoginAttempts { get; set; }
-        public DateTime? LockoutEnd { get; set; }
     }
 }

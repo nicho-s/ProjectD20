@@ -18,6 +18,7 @@ namespace GameForum.ViewModels
         [Range(1, 9, ErrorMessage = "Цифра повинна бути між 1 та 9")]
         public string? ProfilePicture { get; set; }
 
+        [Required(ErrorMessage = "Опису сумно коли він пустий")]
         [StringLength(500, ErrorMessage = "Опис не повинен перевищувати 500 символів")]
         public string? Description { get; set; }
 

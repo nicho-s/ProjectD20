@@ -118,8 +118,8 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Welcome" xml:space="preserve">
-    <value>Hi, you're on the D20 forum! 
-Feel free to offer your ideas and new features.
-Maybe someday you'll be able to play DnD here, or do something very interesting, but for now, talk about different topics, look for friends, you can talk about almost anything. Developer mail: mauzerdaust@gmail.com</value>
+    <value>Hi, you're on the D20 forum, maybe someday it'll grow into something more than a horrible chat thread.
+Maybe one day you will be able to play DnD here and talk about different topics.
+But now it's just someone's term paper.</value>
   </data>
 </root>

@@ -15,7 +15,7 @@ namespace GameForum.Models.DTO
         public string? Username { get; set; }
 
         [Required]
-        [RegularExpression("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*[#$^+=!*()@%&]).{6,}$", ErrorMessage = "Мінімальна довжина 6, в слові повинні бути щонайменше:  1 Вел. буква, 1 мал. буква, 1 спец. символ і 1 цифра")]
+        [RegularExpression("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*[#$^+=!*()@%&]).{6,}$", ErrorMessage = "Мінімальна довжина 6, в слові має бути:  1 Вел. буква, 1 мал. буква, 1 спец. символ і 1 цифра")]
         public string? Password { get; set; }
         
         [Required]
@@ -32,7 +32,5 @@ namespace GameForum.Models.DTO
         public string? Role { get; set; }
         public bool IsBanned { get; set; }
         public bool IsMuted { get; set; }
-        public int FailedLoginAttempts { get; set; }
-        public DateTime? LockoutEnd { get; set; }
     }
 }

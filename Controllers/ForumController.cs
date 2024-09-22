@@ -62,6 +62,7 @@ namespace Lab4_5.Controllers
             return View(userViewModel);
         }
 
+        // Метод для розрахунку віку
         private int CalculateAge(DateTime birthDay)
         {
             var today = DateTime.Today;
@@ -76,6 +77,7 @@ namespace Lab4_5.Controllers
             return age;
         }
 
+        // GET: Topics/Edit/5
         [HttpGet]
         [Authorize]
         public async Task<IActionResult> Edit(Guid id)
@@ -101,6 +103,9 @@ namespace Lab4_5.Controllers
             return View(model);
         }
 
+        // POST: Topics/Edit/5
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [Authorize]
         public async Task<IActionResult> Edit(UpdUserViewModel model)
@@ -132,67 +137,6 @@ namespace Lab4_5.Controllers
 
             return View(model);
         }
-
-        [HttpGet]
-        [Authorize]
-        public async Task<IActionResult> ChangePassword(Guid id)
-        {
-            var user = await _userManager.FindByIdAsync(id.ToString());
-
-            if (user == null)
-            {
-                return NotFound();
-            }
-
-            var model = new UpdPasswordViewModel
-            {
-                Id = user.Id
-            };
-
-            return View(model);
-        }
-
-        [HttpPost]
-        [Authorize]
-        public async Task<IActionResult> ChangePassword(Guid id, UpdPasswordViewModel model)
-        {
-            if (!ModelState.IsValid)
-            {
-                return View(model);
-            }
-
-            var user = await _userManager.FindByIdAsync(id.ToString());
-
-            if (user == null)
-            {
-                return NotFound();
-            }
-
-            // Перевіряємо поточний пароль користувача
-            var passwordCheck = await _userManager.CheckPasswordAsync(user, model.OldPassword);
-            if (!passwordCheck)
-            {
-                ModelState.AddModelError(string.Empty, "Неправильний поточний пароль.");
-                return View(model);
-            }
-
-            // Змінюємо пароль
-            var result = await _userManager.ChangePasswordAsync(user, model.OldPassword, model.NewPassword);
-            if (result.Succeeded)
-            {
-                TempData["Message"] = "Пароль успішно змінено";
-                return RedirectToAction("Edit", new { id = user.Id });
-            }
-
-            // У разі помилок додаємо їх до моделі
-            foreach (var error in result.Errors)
-            {
-                ModelState.AddModelError(string.Empty, error.Description);
-            }
-
-            return View(model);
-        }
-
 
         [HttpPost]
         public IActionResult SetLanguage(string culture, string returnUrl)

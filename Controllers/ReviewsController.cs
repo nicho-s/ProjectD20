@@ -19,6 +19,7 @@ namespace Lab4_5.Controllers
             _context = context;
         }
 
+        // GET: Reviews
         public async Task<IActionResult> Index()
         {
               return _context.Reviews != null ? 
@@ -26,6 +27,7 @@ namespace Lab4_5.Controllers
                           Problem("Entity set 'ForumDBContext.Reviews'  is null.");
         }
 
+        // GET: Reviews/Details/5
         [Authorize]
         public async Task<IActionResult> Details(int? id)
         {
@@ -44,12 +46,16 @@ namespace Lab4_5.Controllers
             return View(review);
         }
 
+        // GET: Reviews/Create
         [Authorize]
         public IActionResult Create()
         {
             return View();
         }
 
+        // POST: Reviews/Create
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]
@@ -100,6 +106,7 @@ namespace Lab4_5.Controllers
         }
 
         [Authorize]
+        // GET: Reviews/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.Reviews == null)
@@ -115,6 +122,9 @@ namespace Lab4_5.Controllers
             return View(review);
         }
 
+        // POST: Reviews/Edit/5
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
@@ -156,6 +166,7 @@ namespace Lab4_5.Controllers
             return View(review);
         }
 
+        // GET: Reviews/Delete/5
         [Authorize]
         public async Task<IActionResult> Delete(int? id)
         {
@@ -174,6 +185,7 @@ namespace Lab4_5.Controllers
             return View(review);
         }
 
+        // POST: Reviews/Delete/5
         [Authorize]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
