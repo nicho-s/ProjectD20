@@ -9,7 +9,6 @@
         justify-content: center; /* Center the content horizontally */
         align-items: center; /* Center the content vertically */
         min-height: 100vh; /* Set minimum height to the full viewport height */
-        
     }
 
     .card {
@@ -80,10 +79,9 @@
                     <p></p>
                     <div class="form-group">
                         <label asp-for="BirthDay" class="control-label">
-                        <strong>@Localizer["BirthDay"]</strong> @Model.FormattedBirthDay
+                            <strong>@Localizer["BirthDay"]</strong>
                         </label>
-                        <input asp-for="BirthDay" class="form-control" value="@Model.BirthDay" />
-                        <span asp-validation-for="BirthDay" class="text-danger"></span>
+                        <input asp-for="BirthDay" type="date" value="@Model.BirthDay.ToString("yyyy-MM-dd")" />
                     </div>
                     <p></p>
                     <div class="form-group">
@@ -97,8 +95,6 @@
                         </select>
                         <span asp-validation-for="Sex" class="text-danger"></span>
                     </div>
-                
-
                 <p></p>
                 <div class="form-group">
                     <input type="submit" value="@Localizer["Save"]" class="btn btn-primary" />
@@ -110,7 +106,6 @@
                         @TempData["Message"]
                     </div>
                 }
-
             </form>
         </div>
     </div>

@@ -81,16 +81,19 @@ namespace GameForum.Repositories.Implementation
         public async Task<Status> RegistrAsync(RegistrModel model)
         {
             var status = new Status();
+
+            // Перевірка наявності користувача з таким же іменем
             var userExists = await userManager.FindByNameAsync(model.Username);
             if (userExists != null)
             {
                 status.StatusCode = 0;
-                status.StatusMessage = "User already exist";
+                status.StatusMessage = "Користувач з таким іменем вже існує";
                 return status;
             }
+
+            // Створення нового користувача
             ApplicationUser user = new ApplicationUser()
             {
-
                 SecurityStamp = Guid.NewGuid().ToString(),
                 Name = model.Name,
                 Email = model.Email,
@@ -100,19 +103,22 @@ namespace GameForum.Repositories.Implementation
                 EmailConfirmed = true,
                 IsBanned = false,
                 IsMuted = false,
-
+                FailedLoginAttempts = 0,
+                LockoutEnd = null,
             };
+
             var result = await userManager.CreateAsync(user, model.Password);
             if (!result.Succeeded)
             {
                 status.StatusCode = 0;
-                status.StatusMessage = "User creation failed";
+                status.StatusMessage = string.Join(", ", result.Errors.Select(e => e.Description));
                 return status;
             }
 
             if (!await roleManager.RoleExistsAsync(model.Role))
+            {
                 await roleManager.CreateAsync(new IdentityRole(model.Role));
-
+            }
 
             if (await roleManager.RoleExistsAsync(model.Role))
             {
@@ -120,9 +126,10 @@ namespace GameForum.Repositories.Implementation
             }
 
             status.StatusCode = 1;
-            status.StatusMessage = "You have registered successfully";
+            status.StatusMessage = "Ви успішно зареєструвалися";
             return status;
         }
+
 
         public async Task<Status> EditUserAsync(string userId, UserViewModel model)
         {
