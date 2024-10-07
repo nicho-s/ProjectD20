@@ -16,9 +16,9 @@ namespace GameForum.Controllers
         private readonly ForumDBContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IUserAuthentificationService _service;
-        private readonly ILogger<ForumController> _logger;
+        private readonly ILogger<UserAuthController> _logger;
 
-        public UserAuthController(ForumDBContext context, IUserAuthentificationService service, UserManager<ApplicationUser> userManager, ILogger<ForumController> logger)
+        public UserAuthController(ForumDBContext context, IUserAuthentificationService service, UserManager<ApplicationUser> userManager, ILogger<UserAuthController> logger)
         {
             _context = context;
             _userManager = userManager;
@@ -45,13 +45,14 @@ namespace GameForum.Controllers
                 if (user == null)
                 {
                     var result = await _service.RegistrAsync(model);
-                    TempData["msg"] = result.StatusMessage;
+                    _logger.LogInformation($"The user {model.Name} has been successfully registered.");
 
                     return RedirectToAction(nameof(Login));
                 }
                 else
                 {
                     ModelState.AddModelError("", "Email зайнятий");
+                    _logger.LogError($"Error: An email address already in usee");
                 }
 
             }
@@ -59,7 +60,7 @@ namespace GameForum.Controllers
             {
                 foreach (var error in modelState.Errors)
                 {
-                    Console.WriteLine(error.ErrorMessage);
+                    _logger.LogInformation($"Error: {error.ErrorMessage}");
                 }
             }
             return View(model);
@@ -94,49 +95,58 @@ namespace GameForum.Controllers
         {
             if (!ModelState.IsValid)
             {
+                return View(model);  // Повертаємо введені дані, якщо валідація не пройшла
+            }
+
+            var user = await _userManager.FindByEmailAsync(model.Email);
+            if (user == null)
+            {
+                ModelState.AddModelError("", "Невірний логін або пароль.");
                 return View(model);
             }
-            var user = await _userManager.FindByEmailAsync(model.Email);
 
-            if (user != null && user.LockoutEnd > DateTime.UtcNow)
+            if (user.LockoutEnd != null && user.LockoutEnd > DateTime.UtcNow)
             {
-                TempData["msg"] = "Ваш обліковий запис заблокований. Спробуйте пізніше.";
-
+                _logger.LogInformation($"Blocked user {user.Email} tried to log in.");
                 return View(model);
             }
 
             var result = await _service.LoginAsync(model);
+            _logger.LogInformation($"User {user.Email} successfully logged in.");
 
             if (result.StatusCode == 1)
             {
-                user.FailedLoginAttempts = 0; 
+                user.FailedLoginAttempts = 0;
+                _logger.LogInformation($"User {user.Email} successfully logged in.");
                 await _userManager.UpdateAsync(user);
                 return RedirectToAction("Main", "Forum");
             }
             else
             {
                 user.FailedLoginAttempts++;
-
                 if (user.FailedLoginAttempts >= 3)
                 {
-                    user.LockoutEnd = DateTime.UtcNow.AddMinutes(5); 
+                    user.LockoutEnd = DateTime.UtcNow.AddMinutes(5);
                     TempData["msg"] = "Ви заблоковані на 5 хвилин через занадто багато невдалих спроб.";
-                    _logger.LogInformation($"User was blocked for 5 minutes due to too many failed attempts.");
+                    _logger.LogInformation($"User {user.Email} blocked for 5 minutes.");
                 }
                 else
                 {
                     TempData["msg"] = result.StatusMessage;
-                    _logger.LogInformation($"{result.StatusMessage}");
+                    _logger.LogInformation($"Login failed for {user.Email}: {result.StatusMessage}");
                 }
 
                 await _userManager.UpdateAsync(user);
-                return RedirectToAction(nameof(Login));
+                ModelState.AddModelError("", "Невірний логін або пароль.");
+                return View(model);
             }
         }
+
 
         public async Task<IActionResult> Logout()
         {
             await _service.LogoutAsync();
+            _logger.LogInformation($"The user was successfully logged out.");
             return RedirectToAction("Main", "Forum");
         }
 
@@ -148,7 +158,7 @@ namespace GameForum.Controllers
 
             if (users.Count == 0)
             {
-                ViewBag.Message = "На разі на сайті ніхто ще не реєструвався";
+                ViewBag.Message = "...";
             }
 
             var model = users.Select(user => new ListUserViewModel

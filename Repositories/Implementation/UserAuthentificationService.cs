@@ -12,13 +12,15 @@ namespace GameForum.Repositories.Implementation
         private readonly UserManager<ApplicationUser> userManager;
         private readonly RoleManager<IdentityRole> roleManager;
         private readonly SignInManager<ApplicationUser> signInManager;
+        private ILogger<UserAuthenticationService> logger;
+
         public UserAuthenticationService(UserManager<ApplicationUser> userManager,
-            SignInManager<ApplicationUser> signInManager, RoleManager<IdentityRole> roleManager)
+            SignInManager<ApplicationUser> signInManager, RoleManager<IdentityRole> roleManager, ILogger<UserAuthenticationService> logger)
         {
             this.userManager = userManager;
             this.roleManager = roleManager;
             this.signInManager = signInManager;
-
+            this.logger = logger;
         }
         public async Task<Status> LoginAsync(LoginModel model)
         {
@@ -60,6 +62,7 @@ namespace GameForum.Repositories.Implementation
                 }
                 status.StatusCode = 1;
                 status.StatusMessage = "Logged in successfully";
+                logger.LogInformation($"User {user.Email} successfully logged in.");
             }
             else if (signInResult.IsLockedOut)
             {

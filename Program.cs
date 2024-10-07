@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Serilog;
+using Serilog.Events;
 using System.Globalization;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -21,18 +22,12 @@ builder.Services.ConfigureApplicationCookie(options => options.LoginPath = "/Use
 
 builder.Services.AddScoped<IUserAuthentificationService, UserAuthenticationService>();
 
-builder.Services
-    .AddLocalization(options => options.ResourcesPath = "Resources");
+builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
 
 builder.Services
     .AddControllersWithViews()
     .AddViewLocalization()
     .AddDataAnnotationsLocalization();
-
-Log.Logger = new LoggerConfiguration().ReadFrom.Configuration(builder.Configuration).Enrich
-    .FromLogContext().WriteTo
-    .File("Logs/log.txt", rollingInterval: RollingInterval.Day)
-    .CreateLogger();
 
 builder.Services.Configure<RequestLocalizationOptions>(options =>
 {
@@ -47,6 +42,14 @@ builder.Services.Configure<RequestLocalizationOptions>(options =>
     options.SupportedCultures = supportedCultures;
     options.SupportedUICultures = supportedCultures;
 });
+
+builder.Host.UseSerilog((context, configuration) =>
+    configuration
+        .ReadFrom.Configuration(context.Configuration)
+        .MinimumLevel.Error() // Встановлюємо мінімальний рівень логування на Error
+        .MinimumLevel.Override("GameForum", LogEventLevel.Information) // Встановлюємо рівень логування на Information для вашого простору імен
+);
+
 var app = builder.Build();
 
 if (!app.Environment.IsDevelopment())
@@ -55,13 +58,7 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-app.Use((context, next) =>
-{
-    Log.Information($"{context.Request.Scheme}://{context.Request.Host}{context.Request.Path}{context.Request.QueryString} [:] " +
-                    $"T:{DateTime.Now}, " +
-                    $"IP:{context.Connection.RemoteIpAddress}");
-    return next();
-});
+app.UseSerilogRequestLogging();
 
 app.UseRequestLocalization(app.Services.GetRequiredService<IOptions<RequestLocalizationOptions>>().Value);
 

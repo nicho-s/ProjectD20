@@ -3,6 +3,11 @@
     Layout = null;
 }
 
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script type="text/javascript" src="https://www.google.com/recaptcha/api.js"></script>
+}
+
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -35,6 +40,8 @@
                 }
                 <button type="submit">Login</button>
             </div>
+
+            <div class="g-recaptcha" data-sitekey="6LdYFVoqAAAAAEDaPOHD5swD9cntcCN7GvRcxo2z"></div><br>
 
             <div class="text-center">
                 <a class="text-alert" href="/UserAuth/Registr">Not a user? SignUp</a>

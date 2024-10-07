@@ -15,14 +15,12 @@ namespace Lab4_5.Controllers
         private readonly ForumDBContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IUserAuthentificationService _service;
-        private readonly ILogger<ForumController> _logger;
 
-        public ForumController(ForumDBContext context, IUserAuthentificationService service, UserManager<ApplicationUser> userManager, ILogger<ForumController> logger)
+        public ForumController(ForumDBContext context, IUserAuthentificationService service, UserManager<ApplicationUser> userManager)
         {
             _context = context;
             _userManager = userManager;
             _service = service;
-            _logger = logger;
         }
 
         public IActionResult Main()
