@@ -23,11 +23,13 @@ namespace GameForum.Repositories.Implementation
         public async Task<Status> LoginAsync(LoginModel model)
         {
             var status = new Status();
-            var user = await userManager.FindByNameAsync(model.Username);
+
+            var user = await userManager.FindByEmailAsync(model.Email);
+
             if (user == null)
             {
                 status.StatusCode = 0;
-                status.StatusMessage = "Invalid username";
+                status.StatusMessage = "Invalid email";
                 return status;
             }
             if (user.IsBanned)

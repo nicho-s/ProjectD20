@@ -2,10 +2,12 @@
 using GameForum.Models.DTO;
 using GameForum.Repositories.Abstract;
 using GameForum.ViewModels;
+using Lab4_5.Controllers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Net.Http;
 
 namespace GameForum.Controllers
 {
@@ -14,12 +16,14 @@ namespace GameForum.Controllers
         private readonly ForumDBContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IUserAuthentificationService _service;
+        private readonly ILogger<ForumController> _logger;
 
-        public UserAuthController(ForumDBContext context, IUserAuthentificationService service, UserManager<ApplicationUser> userManager)
+        public UserAuthController(ForumDBContext context, IUserAuthentificationService service, UserManager<ApplicationUser> userManager, ILogger<ForumController> logger)
         {
             _context = context;
             _userManager = userManager;
             _service = service;
+            _logger = logger;
         }
 
         //Registration
@@ -89,14 +93,15 @@ namespace GameForum.Controllers
         public async Task<IActionResult> Login(LoginModel model)
         {
             if (!ModelState.IsValid)
+            {
                 return View(model);
-
-            var user = await _userManager.FindByNameAsync(model.Username);
+            }
+            var user = await _userManager.FindByEmailAsync(model.Email);
 
             if (user != null && user.LockoutEnd > DateTime.UtcNow)
             {
-                // Користувач заблокований, показуємо повідомлення
                 TempData["msg"] = "Ваш обліковий запис заблокований. Спробуйте пізніше.";
+
                 return View(model);
             }
 
@@ -104,7 +109,7 @@ namespace GameForum.Controllers
 
             if (result.StatusCode == 1)
             {
-                user.FailedLoginAttempts = 0; // Скидаємо лічильник невдалих спроб
+                user.FailedLoginAttempts = 0; 
                 await _userManager.UpdateAsync(user);
                 return RedirectToAction("Main", "Forum");
             }
@@ -114,12 +119,14 @@ namespace GameForum.Controllers
 
                 if (user.FailedLoginAttempts >= 3)
                 {
-                    user.LockoutEnd = DateTime.UtcNow.AddMinutes(5); // Блокувати на 5 хвилин
+                    user.LockoutEnd = DateTime.UtcNow.AddMinutes(5); 
                     TempData["msg"] = "Ви заблоковані на 5 хвилин через занадто багато невдалих спроб.";
+                    _logger.LogInformation($"User was blocked for 5 minutes due to too many failed attempts.");
                 }
                 else
                 {
                     TempData["msg"] = result.StatusMessage;
+                    _logger.LogInformation($"{result.StatusMessage}");
                 }
 
                 await _userManager.UpdateAsync(user);

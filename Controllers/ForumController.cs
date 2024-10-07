@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Serilog.Events;
 
 namespace Lab4_5.Controllers
 {
@@ -14,12 +15,14 @@ namespace Lab4_5.Controllers
         private readonly ForumDBContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IUserAuthentificationService _service;
+        private readonly ILogger<ForumController> _logger;
 
-        public ForumController(ForumDBContext context, IUserAuthentificationService service, UserManager<ApplicationUser> userManager)
+        public ForumController(ForumDBContext context, IUserAuthentificationService service, UserManager<ApplicationUser> userManager, ILogger<ForumController> logger)
         {
             _context = context;
             _userManager = userManager;
             _service = service;
+            _logger = logger;
         }
 
         public IActionResult Main()
